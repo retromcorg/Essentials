@@ -138,11 +138,11 @@ public class PermissionsHandler implements IPermissionsHandler
 		{
 			if (permPlugin.getDescription().getVersion().charAt(0) == '3')
 			{
-				if (!(handler instanceof Permissions3Handler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using Permissions 3 based permissions.");
-					handler = new Permissions3Handler(permPlugin);
-				}
+//				if (!(handler instanceof Permissions3Handler))
+//				{
+//					LOGGER.log(Level.INFO, "Essentials: Using Permissions 3 based permissions.");
+//					handler = new Permissions3Handler(permPlugin);
+//				}
 			}
 			else
 			{
