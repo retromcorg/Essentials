@@ -127,9 +127,10 @@ public class iCo4 implements Method {
         }
 
         public boolean remove() {
-            if(this.account == null) return false;
-            this.account.remove();
-            return true;
+//            if(this.account == null) return false;
+//            this.account.remove();
+//            return true;
+            return false;
         }
     }
 }
