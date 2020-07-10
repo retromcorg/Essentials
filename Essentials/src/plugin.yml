@@ -2,7 +2,7 @@
 name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: TeamCity
+version: 2.6.8
 website: http://www.earth2me.net:8001/
 description: Provides an essential, core set of commands for Bukkit.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
