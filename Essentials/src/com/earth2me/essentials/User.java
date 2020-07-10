@@ -2,6 +2,9 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
+import com.johnymuffin.beta.fundamentals.Fundamentals;
+import com.projectposeidon.api.PoseidonUUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -9,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser {
@@ -247,6 +251,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
 
     @Override
     public double getMoney() {
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
+            Fundamentals fundamentals = (Fundamentals) Bukkit.getServer().getPluginManager().getPlugin("Fundamentals");
+            fundamentals.debugLogger(Level.INFO, "Overriding Essentials Get Money For " + this.getName(), 3);
+            return fundamentals.getPlayerMap().getPlayer(PoseidonUUID.getPlayerGracefulUUID(this.getName())).getBalance();
+
+        }
+
         if (ess.getPaymentMethod().hasMethod()) {
             try {
                 final Method method = ess.getPaymentMethod().getMethod();
@@ -263,6 +274,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
 
     @Override
     public void setMoney(final double value) {
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
+            Fundamentals fundamentals = (Fundamentals) Bukkit.getServer().getPluginManager().getPlugin("Fundamentals");
+            fundamentals.debugLogger(Level.INFO, "Overriding Essentials Set Money For " + this.getName(), 3);
+            fundamentals.getPlayerMap().getPlayer(PoseidonUUID.getPlayerGracefulUUID(this.getName())).setBalance(value);
+            return;
+        }
+
         if (ess.getPaymentMethod().hasMethod()) {
             try {
                 final Method method = ess.getPaymentMethod().getMethod();
