@@ -1,59 +1,59 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import java.net.InetSocketAddress;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.net.InetSocketAddress;
 
-public interface IUser
-{
-	int getHealth();
 
-	Location getLocation();
+public interface IUser {
+    int getHealth();
 
-	boolean isOnline();
+    Location getLocation();
 
-	void sendMessage(String string);
+    boolean isOnline();
 
-	long getLastTeleportTimestamp();
+    void sendMessage(String string);
 
-	boolean isAuthorized(String node);
+    long getLastTeleportTimestamp();
 
-	boolean isAuthorized(IEssentialsCommand cmd);
+    void setLastTeleportTimestamp(long time);
 
-	boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
+    boolean isAuthorized(String node);
 
-	void setLastTeleportTimestamp(long time);
+    boolean isAuthorized(IEssentialsCommand cmd);
 
-	Location getLastLocation();
+    boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
-	Player getBase();
+    Location getLastLocation();
 
-	double getMoney();
+    Player getBase();
 
-	void takeMoney(double value);
+    double getMoney();
 
-	void giveMoney(double value);
+    void takeMoney(double value);
 
-	PlayerInventory getInventory();
+    void giveMoney(double value);
 
-	void updateInventory();
+    PlayerInventory getInventory();
 
-	String getGroup();
+    void updateInventory();
 
-	void setLastLocation();
+    String getGroup();
 
-	Location getHome(String name) throws Exception;
+    void setLastLocation();
 
-	Location getHome(Location loc) throws Exception;
+    Location getHome(String name) throws Exception;
 
-	String getName();
+    Location getHome(Location loc) throws Exception;
 
-	InetSocketAddress getAddress();
+    String getName();
 
-	String getDisplayName();
+    InetSocketAddress getAddress();
 
-	boolean isHidden();
+    String getDisplayName();
+
+    boolean isHidden();
 }

@@ -1,12 +1,10 @@
 package com.earth2me.essentials.register.payment.methods;
 
+import com.earth2me.essentials.register.payment.Method;
 import com.iCo6.iConomy;
 import com.iCo6.system.Account;
 import com.iCo6.system.Accounts;
 import com.iCo6.system.Holdings;
-
-import com.earth2me.essentials.register.payment.Method;
-
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -23,6 +21,10 @@ public class iCo6 implements Method {
         return this.iConomy;
     }
 
+    public void setPlugin(Plugin plugin) {
+        iConomy = (iConomy) plugin;
+    }
+
     public String getName() {
         return "iConomy";
     }
@@ -32,7 +34,7 @@ public class iCo6 implements Method {
     }
 
     public String format(double amount) {
-        return this.iConomy.format(amount);
+        return com.iCo6.iConomy.format(amount);
     }
 
     public boolean hasBanks() {
@@ -60,19 +62,18 @@ public class iCo6 implements Method {
     }
 
     public boolean isCompatible(Plugin plugin) {
-        try { Class.forName("com.iCo6.IO"); }
-        catch(Exception e) { return false; }
+        try {
+            Class.forName("com.iCo6.IO");
+        } catch (Exception e) {
+            return false;
+        }
 
         return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iCo6.iConomy") && plugin instanceof iConomy;
     }
 
-    public void setPlugin(Plugin plugin) {
-        iConomy = (iConomy)plugin;
-    }
-
     public class iCoAccount implements MethodAccount {
-        private Account account;
-        private Holdings holdings;
+        private final Account account;
+        private final Holdings holdings;
 
         public iCoAccount(Account account) {
             this.account = account;
@@ -88,31 +89,31 @@ public class iCo6 implements Method {
         }
 
         public boolean set(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.setBalance(amount);
             return true;
         }
 
         public boolean add(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.add(amount);
             return true;
         }
 
         public boolean subtract(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.subtract(amount);
             return true;
         }
 
         public boolean multiply(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.multiply(amount);
             return true;
         }
 
         public boolean divide(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.divide(amount);
             return true;
         }
@@ -134,7 +135,7 @@ public class iCo6 implements Method {
         }
 
         public boolean remove() {
-            if(this.account == null) return false;
+            if (this.account == null) return false;
             this.account.remove();
             return true;
         }

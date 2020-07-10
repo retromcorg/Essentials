@@ -1,10 +1,8 @@
 package com.earth2me.essentials.register.payment.methods;
 
 import com.earth2me.essentials.register.payment.Method;
-
 import me.ashtheking.currency.Currency;
 import me.ashtheking.currency.CurrencyList;
-
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -19,6 +17,10 @@ public class MCUR implements Method {
 
     public Object getPlugin() {
         return this.currencyList;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        currencyList = (Currency) plugin;
     }
 
     public String getName() {
@@ -61,12 +63,8 @@ public class MCUR implements Method {
         return plugin.getDescription().getName().equalsIgnoreCase(getName()) && plugin instanceof Currency;
     }
 
-    public void setPlugin(Plugin plugin) {
-        currencyList = (Currency) plugin;
-    }
-
-    public class MCurrencyAccount implements MethodAccount{
-        private String name;
+    public class MCurrencyAccount implements MethodAccount {
+        private final String name;
 
         public MCurrencyAccount(String name) {
             this.name = name;

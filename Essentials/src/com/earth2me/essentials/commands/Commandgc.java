@@ -6,25 +6,21 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 
-public class Commandgc extends EssentialsCommand
-{
-	public Commandgc()
-	{
-		super("gc");
-	}
+public class Commandgc extends EssentialsCommand {
+    public Commandgc() {
+        super("gc");
+    }
 
-	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
-	{
-		sender.sendMessage(Util.format("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
-		sender.sendMessage(Util.format("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
-		sender.sendMessage(Util.format("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));
-		for (World w : server.getWorlds())
-		{
-			sender.sendMessage(
-					(w.getEnvironment() == World.Environment.NETHER ? "Nether" : "World") + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + Util.i18n("gcchunks")
-					+ w.getEntities().size() + Util.i18n("gcentities"));
-		}
-	}
+    @Override
+    protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+        sender.sendMessage(Util.format("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
+        sender.sendMessage(Util.format("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
+        sender.sendMessage(Util.format("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));
+        for (World w : server.getWorlds()) {
+            sender.sendMessage(
+                    (w.getEnvironment() == World.Environment.NETHER ? "Nether" : "World") + " \"" + w.getName() + "\": "
+                            + w.getLoadedChunks().length + Util.i18n("gcchunks")
+                            + w.getEntities().size() + Util.i18n("gcentities"));
+        }
+    }
 }

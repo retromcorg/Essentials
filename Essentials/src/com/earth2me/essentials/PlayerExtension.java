@@ -1,78 +1,65 @@
 package com.earth2me.essentials;
 
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.IInventory;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 
 
-public class PlayerExtension extends PlayerWrapper
-{
-	protected final IEssentials ess;
-	
-	public PlayerExtension(Player base, IEssentials ess)
-	{
-		super(base);
-		this.ess = ess;
-	}
+public class PlayerExtension extends PlayerWrapper {
+    protected final IEssentials ess;
 
-	public boolean isBanned()
-	{
-		return ess.getBans().isNameBanned(this.getName());
-	}
+    public PlayerExtension(Player base, IEssentials ess) {
+        super(base);
+        this.ess = ess;
+    }
 
-	public boolean isIpBanned()
-	{
-		return ess.getBans().isIpBanned(getAddress().getAddress().getHostAddress());
-	}
+    public boolean isBanned() {
+        return ess.getBans().isNameBanned(this.getName());
+    }
 
-	public float getCorrectedYaw()
-	{
-		float angle = (getLocation().getYaw() - 90.0f) % 360.0f;
-		if (angle < 0) {
-			angle += 360.0f;
-		}
-		return angle;
-	}
-	
-	public void showInventory(IInventory inventory)
-	{
-		getHandle().a(inventory);
-	}
+    public boolean isIpBanned() {
+        return ess.getBans().isIpBanned(getAddress().getAddress().getHostAddress());
+    }
 
-	public void showInventory(CraftInventoryPlayer inventory)
-	{
-		showInventory((IInventory)inventory.getInventory());
-	}
+    public float getCorrectedYaw() {
+        float angle = (getLocation().getYaw() - 90.0f) % 360.0f;
+        if (angle < 0) {
+            angle += 360.0f;
+        }
+        return angle;
+    }
 
-	public TargetBlock getTarget()
-	{
-		return new TargetBlock(getBase());
-	}
+    public void showInventory(IInventory inventory) {
+        getHandle().a(inventory);
+    }
 
-	public String getGroup()
-	{
-		return ess.getPermissionsHandler().getGroup(base);
-	}
-	
-	public boolean inGroup(String group)
-	{
-		return ess.getPermissionsHandler().inGroup(base, group);
-	}
+    public void showInventory(CraftInventoryPlayer inventory) {
+        showInventory(inventory.getInventory());
+    }
 
-	public boolean canBuild()
-	{
-		return ess.getPermissionsHandler().canBuild(base, getGroup());
-	}
+    public TargetBlock getTarget() {
+        return new TargetBlock(getBase());
+    }
 
-	public EntityPlayer getHandle()
-	{
-		return getCraftPlayer().getHandle();
-	}
+    public String getGroup() {
+        return ess.getPermissionsHandler().getGroup(base);
+    }
 
-	public CraftPlayer getCraftPlayer()
-	{
-		return (CraftPlayer)base;
-	}
+    public boolean inGroup(String group) {
+        return ess.getPermissionsHandler().inGroup(base, group);
+    }
+
+    public boolean canBuild() {
+        return ess.getPermissionsHandler().canBuild(base, getGroup());
+    }
+
+    public EntityPlayer getHandle() {
+        return getCraftPlayer().getHandle();
+    }
+
+    public CraftPlayer getCraftPlayer() {
+        return (CraftPlayer) base;
+    }
 }

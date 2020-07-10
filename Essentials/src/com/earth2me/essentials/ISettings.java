@@ -1,143 +1,143 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import java.util.List;
-import java.util.Map;
 import org.bukkit.ChatColor;
 
+import java.util.List;
+import java.util.Map;
 
-public interface ISettings extends IConf
-{
 
-	boolean areSignsDisabled();
+public interface ISettings extends IConf {
 
-	String format(String format, IUser user);
+    boolean areSignsDisabled();
 
-	String getAnnounceNewPlayerFormat(IUser user);
+    String format(String format, IUser user);
 
-	boolean getAnnounceNewPlayers();
+    String getAnnounceNewPlayerFormat(IUser user);
 
-	String getBackupCommand();
+    boolean getAnnounceNewPlayers();
 
-	long getBackupInterval();
+    String getBackupCommand();
 
-	boolean getBedSetsHome();
+    long getBackupInterval();
 
-	String getChatFormat(String group);
+    boolean getBedSetsHome();
 
-	int getChatRadius();
+    String getChatFormat(String group);
 
-	double getCommandCost(IEssentialsCommand cmd);
+    int getChatRadius();
 
-	double getCommandCost(String label);
+    double getCommandCost(IEssentialsCommand cmd);
 
-	String getCurrencySymbol();
+    double getCommandCost(String label);
 
-	int getDefaultStackSize();
+    String getCurrencySymbol();
 
-	boolean getGenerateExitPortals();
+    int getDefaultStackSize();
 
-	double getHealCooldown();
+    boolean getGenerateExitPortals();
 
-	Object getKit(String name);
+    double getHealCooldown();
 
-	Map<String, Object> getKits();
+    Object getKit(String name);
 
-	String getLocale();
+    Map<String, Object> getKits();
 
-	String getNetherName();
+    String getLocale();
 
-	boolean getNetherPortalsEnabled();
+    String getNetherName();
 
-	double getNetherRatio();
+    boolean getNetherPortalsEnabled();
 
-	String getNewbieSpawn();
+    double getNetherRatio();
 
-	String getNicknamePrefix();
+    String getNewbieSpawn();
 
-	ChatColor getOperatorColor() throws Exception;
+    String getNicknamePrefix();
 
-	boolean getPerWarpPermission();
+    ChatColor getOperatorColor() throws Exception;
 
-	boolean getProtectBoolean(final String configName, boolean def);
+    boolean getPerWarpPermission();
 
-	int getProtectCreeperMaxHeight();
+    boolean getProtectBoolean(final String configName, boolean def);
 
-	List<Integer> getProtectList(final String configName);
+    int getProtectCreeperMaxHeight();
 
-	boolean getProtectPreventSpawn(final String creatureName);
+    List<Integer> getProtectList(final String configName);
 
-	String getProtectString(final String configName);
+    boolean getProtectPreventSpawn(final String creatureName);
 
-	boolean getReclaimSetting();
+    String getProtectString(final String configName);
 
-	boolean getRespawnAtHome();
-	
-	int getMultipleHomes();
+    boolean getReclaimSetting();
 
-	boolean getSortListByGroups();
+    boolean getRespawnAtHome();
 
-	int getSpawnMobLimit();
+    int getMultipleHomes();
 
-	int getStartingBalance();
+    boolean getSortListByGroups();
 
-	double getTeleportCooldown();
+    int getSpawnMobLimit();
 
-	double getTeleportDelay();
+    int getStartingBalance();
 
-	boolean hidePermissionlessHelp();
+    double getTeleportCooldown();
 
-	boolean isCommandDisabled(final IEssentialsCommand cmd);
+    double getTeleportDelay();
 
-	boolean isCommandDisabled(String label);
+    boolean hidePermissionlessHelp();
 
-	boolean isCommandOverridden(String name);
+    boolean isCommandDisabled(final IEssentialsCommand cmd);
 
-	boolean isCommandRestricted(IEssentialsCommand cmd);
+    boolean isCommandDisabled(String label);
 
-	boolean isCommandRestricted(String label);
+    boolean isCommandOverridden(String name);
 
-	boolean isDebug();
+    boolean isCommandRestricted(IEssentialsCommand cmd);
 
-	boolean isEcoDisabled();
+    boolean isCommandRestricted(String label);
 
-	boolean isNetherEnabled();
+    boolean isDebug();
 
-	boolean isTradeInStacks(int id);
+    boolean isEcoDisabled();
 
-	List<Integer> itemSpawnBlacklist();
+    boolean isNetherEnabled();
 
-	boolean permissionBasedItemSpawn();
+    boolean isTradeInStacks(int id);
 
-	boolean showNonEssCommandsInHelp();
+    List<Integer> itemSpawnBlacklist();
 
-	boolean spawnIfNoHome();
+    boolean permissionBasedItemSpawn();
 
-	boolean use1to1RatioInNether();
+    boolean showNonEssCommandsInHelp();
 
-	boolean warnOnBuildDisallow();
+    boolean spawnIfNoHome();
 
-	boolean warnOnSmite();
-	
-	double getMaxMoney();
+    boolean use1to1RatioInNether();
 
-	boolean isEcoLogEnabled();
-	
-	boolean removeGodOnDisconnect();
+    boolean warnOnBuildDisallow();
 
-	boolean changeDisplayName();
+    boolean warnOnSmite();
 
-	boolean isPlayerCommand(String string);
+    double getMaxMoney();
 
-	boolean useBukkitPermissions();
+    boolean isEcoLogEnabled();
 
-	boolean addPrefixSuffix();
+    boolean removeGodOnDisconnect();
 
-	boolean isUpdateEnabled();
+    boolean changeDisplayName();
 
-	long getAutoAfk();
+    boolean isPlayerCommand(String string);
 
-	long getAutoAfkKick();
+    boolean useBukkitPermissions();
 
-	boolean getFreezeAfkPlayers();
+    boolean addPrefixSuffix();
+
+    boolean isUpdateEnabled();
+
+    long getAutoAfk();
+
+    long getAutoAfkKick();
+
+    boolean getFreezeAfkPlayers();
 }

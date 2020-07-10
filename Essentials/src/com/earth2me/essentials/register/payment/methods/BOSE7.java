@@ -20,6 +20,10 @@ public class BOSE7 implements Method {
         return this.BOSEconomy;
     }
 
+    public void setPlugin(Plugin plugin) {
+        BOSEconomy = (BOSEconomy) plugin;
+    }
+
     public String getName() {
         return "BOSEconomy";
     }
@@ -30,7 +34,7 @@ public class BOSE7 implements Method {
 
     public String format(double amount) {
         String currency = this.BOSEconomy.getMoneyNamePlural();
-        if(amount == 1) currency = this.BOSEconomy.getMoneyName();
+        if (amount == 1) currency = this.BOSEconomy.getMoneyName();
         return amount + " " + currency;
     }
 
@@ -51,12 +55,12 @@ public class BOSE7 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        if(!hasAccount(name)) return null;
+        if (!hasAccount(name)) return null;
         return new BOSEAccount(name, this.BOSEconomy);
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
-        if(!hasBankAccount(bank, name)) return null;
+        if (!hasBankAccount(bank, name)) return null;
         return new BOSEBankAccount(bank, BOSEconomy);
     }
 
@@ -64,13 +68,9 @@ public class BOSE7 implements Method {
         return plugin.getDescription().getName().equalsIgnoreCase("boseconomy") && plugin instanceof BOSEconomy && !plugin.getDescription().getVersion().equals("0.6.2");
     }
 
-    public void setPlugin(Plugin plugin) {
-        BOSEconomy = (BOSEconomy)plugin;
-    }
-
     public class BOSEAccount implements MethodAccount {
-        private String name;
-        private BOSEconomy BOSEconomy;
+        private final String name;
+        private final BOSEconomy BOSEconomy;
 
         public BOSEAccount(String name, BOSEconomy bOSEconomy) {
             this.name = name;
@@ -126,8 +126,8 @@ public class BOSE7 implements Method {
     }
 
     public class BOSEBankAccount implements MethodBankAccount {
-        private String bank;
-        private BOSEconomy BOSEconomy;
+        private final String bank;
+        private final BOSEconomy BOSEconomy;
 
         public BOSEBankAccount(String bank, BOSEconomy bOSEconomy) {
             this.bank = bank;

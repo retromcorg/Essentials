@@ -5,30 +5,30 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
 
 public final class Console implements IReplyTo {
-	private static Console instance = new Console();
-	private CommandSender replyTo;
-	public final static String NAME = "Console";
-	
-	private Console() {
-		
-	}
-	
-	public static CommandSender getCommandSender(Server server) throws Exception {
-		if (! (server instanceof CraftServer)) {
-			throw new Exception(Util.i18n("invalidServer"));
-		}
-		return ((CraftServer)server).getServer().console;
-	}
+    public final static String NAME = "Console";
+    private static final Console instance = new Console();
+    private CommandSender replyTo;
 
-	public void setReplyTo(CommandSender user) {
-		replyTo = user;
-	}
+    private Console() {
 
-	public CommandSender getReplyTo() {
-		return replyTo;
-	}
-	
-	public static Console getConsoleReplyTo() {
-		return instance;
-	}
+    }
+
+    public static CommandSender getCommandSender(Server server) throws Exception {
+        if (!(server instanceof CraftServer)) {
+            throw new Exception(Util.i18n("invalidServer"));
+        }
+        return ((CraftServer) server).getServer().console;
+    }
+
+    public static Console getConsoleReplyTo() {
+        return instance;
+    }
+
+    public CommandSender getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(CommandSender user) {
+        replyTo = user;
+    }
 }

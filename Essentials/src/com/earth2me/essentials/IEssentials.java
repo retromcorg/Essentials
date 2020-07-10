@@ -9,59 +9,58 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
-public interface IEssentials extends Plugin
-{
-	void addReloadListener(IConf listener);
+public interface IEssentials extends Plugin {
+    void addReloadListener(IConf listener);
 
-	void reload();
+    void reload();
 
-	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
+    boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
 
-	User getUser(Object base);
+    User getUser(Object base);
 
-	User getOfflineUser(String name);
+    User getOfflineUser(String name);
 
-	World getWorld(String name);
+    World getWorld(String name);
 
-	int broadcastMessage(IUser sender, String message);
+    int broadcastMessage(IUser sender, String message);
 
-	ISettings getSettings();
+    ISettings getSettings();
 
-	BukkitScheduler getScheduler();
+    BukkitScheduler getScheduler();
 
-	String[] getMotd(CommandSender sender, String def);
+    String[] getMotd(CommandSender sender, String def);
 
-	String[] getLines(CommandSender sender, String node, String def);
+    String[] getLines(CommandSender sender, String node, String def);
 
-	Jail getJail();
+    Jail getJail();
 
-	Warps getWarps();
+    Warps getWarps();
 
-	Worth getWorth();
+    Worth getWorth();
 
-	Backup getBackup();
+    Backup getBackup();
 
-	Spawn getSpawn();
+    Spawn getSpawn();
 
-	Methods getPaymentMethod();
+    Methods getPaymentMethod();
 
-	int scheduleAsyncDelayedTask(Runnable run);
+    int scheduleAsyncDelayedTask(Runnable run);
 
-	int scheduleSyncDelayedTask(Runnable run);
+    int scheduleSyncDelayedTask(Runnable run);
 
-	int scheduleSyncDelayedTask(Runnable run, long delay);
+    int scheduleSyncDelayedTask(Runnable run, long delay);
 
-	int scheduleSyncRepeatingTask(final Runnable run, long delay, long period);
+    int scheduleSyncRepeatingTask(final Runnable run, long delay, long period);
 
-	BanWorkaround getBans();
+    BanWorkaround getBans();
 
-	TNTExplodeListener getTNTListener();
+    TNTExplodeListener getTNTListener();
 
-	PermissionsHandler getPermissionsHandler();
+    PermissionsHandler getPermissionsHandler();
 
-	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
+    void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 
-	ItemDb getItemDb();
+    ItemDb getItemDb();
 
-	UserMap getUserMap();
+    UserMap getUserMap();
 }

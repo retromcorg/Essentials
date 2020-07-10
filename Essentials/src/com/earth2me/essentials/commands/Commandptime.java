@@ -1,247 +1,192 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.DescParseTickFormat;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.*;
 
-public class Commandptime extends EssentialsCommand
-{
-	public static final Set<String> getAliases = new HashSet<String>();
 
-	static
-	{
-		getAliases.add("get");
-		getAliases.add("list");
-		getAliases.add("show");
-		getAliases.add("display");
-	}
+public class Commandptime extends EssentialsCommand {
+    public static final Set<String> getAliases = new HashSet<String>();
 
-	public Commandptime()
-	{
-		super("ptime");
-	}
+    static {
+        getAliases.add("get");
+        getAliases.add("list");
+        getAliases.add("show");
+        getAliases.add("display");
+    }
 
-	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
-	{
-		// Which Players(s) / Users(s) are we interested in?
-		String userSelector = null;
-		if (args.length == 2)
-		{
-			userSelector = args[1];
-		}
-		Set<User> users = getUsers(server, sender, userSelector);
+    public Commandptime() {
+        super("ptime");
+    }
 
-		// If no arguments we are reading the time
-		if (args.length == 0)
-		{
-			getUsersTime(sender, users);
-			return;
-		}
+    @Override
+    public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception {
+        // Which Players(s) / Users(s) are we interested in?
+        String userSelector = null;
+        if (args.length == 2) {
+            userSelector = args[1];
+        }
+        Set<User> users = getUsers(server, sender, userSelector);
 
-		User user = ess.getUser(sender);
-		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
-		{
-			user.sendMessage(Util.i18n("pTimeOthersPermission"));
-			return;
-		}
+        // If no arguments we are reading the time
+        if (args.length == 0) {
+            getUsersTime(sender, users);
+            return;
+        }
 
-		Long ticks;
-		// Parse the target time int ticks from args[0]
-		String timeParam = args[0];
-		Boolean relative = true;
-		if (timeParam.startsWith("@"))
-		{
-			relative = false;
-			timeParam = timeParam.substring(1);
-		}
+        User user = ess.getUser(sender);
+        if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others")) {
+            user.sendMessage(Util.i18n("pTimeOthersPermission"));
+            return;
+        }
 
-		if (getAliases.contains(timeParam))
-		{
-			getUsersTime(sender, users);
-			return;
-		}
-		else if (DescParseTickFormat.meansReset(timeParam))
-		{
-			ticks = null;
-		}
-		else
-		{
-			try
-			{
-				ticks = DescParseTickFormat.parse(timeParam);
-			}
-			catch (NumberFormatException e)
-			{
-				throw new NotEnoughArgumentsException();
-			}
-		}
+        Long ticks;
+        // Parse the target time int ticks from args[0]
+        String timeParam = args[0];
+        Boolean relative = true;
+        if (timeParam.startsWith("@")) {
+            relative = false;
+            timeParam = timeParam.substring(1);
+        }
 
-		setUsersTime(sender, users, ticks, relative);
-	}
+        if (getAliases.contains(timeParam)) {
+            getUsersTime(sender, users);
+            return;
+        } else if (DescParseTickFormat.meansReset(timeParam)) {
+            ticks = null;
+        } else {
+            try {
+                ticks = DescParseTickFormat.parse(timeParam);
+            } catch (NumberFormatException e) {
+                throw new NotEnoughArgumentsException();
+            }
+        }
 
-	/**
-	 * Used to get the time and inform
-	 */
-	private void getUsersTime(final CommandSender sender, final Collection<User> users)
-	{
-		if (users.size() > 1) 
-		{
-			sender.sendMessage(Util.format("pTimePlayers"));
-		}
-		
-		for (User user : users) 
-		{
-			if(user.getPlayerTimeOffset() == 0)
-			{
-				sender.sendMessage(Util.format("pTimeNormal", user.getName()));
-			}
-			else {
-				String time = DescParseTickFormat.format(user.getPlayerTime());
-				if(!user.isPlayerTimeRelative()) 
-				{
-					sender.sendMessage(Util.format("pTimeCurrentFixed", user.getName(), time));
-				}
-				else {
-					sender.sendMessage(Util.format("pTimeCurrent", user.getName(), time));
-				}
-			}
-		}
-		
-		return;
-	}
+        setUsersTime(sender, users, ticks, relative);
+    }
 
-	/**
-	 * Used to set the time and inform of the change
-	 */
-	private void setUsersTime(final CommandSender sender, final Collection<User> users, final Long ticks, Boolean relative)
-	{
-		// Update the time
-		if (ticks == null)
-		{
-			// Reset
-			for (User user : users)
-			{
-				user.resetPlayerTime();
-			}
-		}
-		else
-		{
-			// Set
-			for (User user : users)
-			{
-				final World world = user.getWorld();
-				long time = user.getPlayerTime();
-				time -= time % 24000;
-				time += 24000 + ticks;
-				if (relative)
-				{
-					time -= world.getTime();
-				}
-				user.setPlayerTime(time, relative);
-			}
-		}
+    /**
+     * Used to get the time and inform
+     */
+    private void getUsersTime(final CommandSender sender, final Collection<User> users) {
+        if (users.size() > 1) {
+            sender.sendMessage(Util.format("pTimePlayers"));
+        }
 
-		final StringBuilder msg = new StringBuilder();
-		for (User user : users)
-		{
-			if (msg.length() > 0)
-			{
-				msg.append(", ");
-			}
+        for (User user : users) {
+            if (user.getPlayerTimeOffset() == 0) {
+                sender.sendMessage(Util.format("pTimeNormal", user.getName()));
+            } else {
+                String time = DescParseTickFormat.format(user.getPlayerTime());
+                if (!user.isPlayerTimeRelative()) {
+                    sender.sendMessage(Util.format("pTimeCurrentFixed", user.getName(), time));
+                } else {
+                    sender.sendMessage(Util.format("pTimeCurrent", user.getName(), time));
+                }
+            }
+        }
 
-			msg.append(user.getName());
-		}
+        return;
+    }
 
-		// Inform the sender of the change
-		if (ticks == null)
-		{
-			sender.sendMessage(Util.format("pTimeReset", msg.toString()));
-		}
-		else
-		{
-			String time = DescParseTickFormat.format(ticks);
-			if (!relative)
-			{
-				sender.sendMessage(Util.format("pTimeSetFixed", time, msg.toString()));
-			}
-			else {
-				sender.sendMessage(Util.format("pTimeSet", time, msg.toString()));
-			}
-		}
-	}
+    /**
+     * Used to set the time and inform of the change
+     */
+    private void setUsersTime(final CommandSender sender, final Collection<User> users, final Long ticks, Boolean relative) {
+        // Update the time
+        if (ticks == null) {
+            // Reset
+            for (User user : users) {
+                user.resetPlayerTime();
+            }
+        } else {
+            // Set
+            for (User user : users) {
+                final World world = user.getWorld();
+                long time = user.getPlayerTime();
+                time -= time % 24000;
+                time += 24000 + ticks;
+                if (relative) {
+                    time -= world.getTime();
+                }
+                user.setPlayerTime(time, relative);
+            }
+        }
 
-	/**
-	 * Used to parse an argument of the type "users(s) selector"
-	 */
-	private Set<User> getUsers(final Server server, final CommandSender sender, final String selector) throws Exception
-	{
-		final Set<User> users = new TreeSet<User>(new UserNameComparator());
-		// If there is no selector we want the sender itself. Or all users if sender isn't a user.
-		if (selector == null)
-		{
-			final User user = ess.getUser(sender);
-			if (user == null)
-			{
-				for (Player player : server.getOnlinePlayers())
-				{
-					users.add(ess.getUser(player));
-				}
-			}
-			else
-			{
-				users.add(user);
-			}
-			return users;
-		}
+        final StringBuilder msg = new StringBuilder();
+        for (User user : users) {
+            if (msg.length() > 0) {
+                msg.append(", ");
+            }
 
-		// Try to find the user with name = selector
-		User user = null;
-		final List<Player> matchedPlayers = server.matchPlayer(selector);
-		if (!matchedPlayers.isEmpty())
-		{
-			user = ess.getUser(matchedPlayers.get(0));
-		}
+            msg.append(user.getName());
+        }
 
-		if (user != null)
-		{
-			users.add(user);
-		}
-		// If that fails, Is the argument something like "*" or "all"?
-		else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all"))
-		{
-			for (Player player : server.getOnlinePlayers())
-			{
-				users.add(ess.getUser(player));
-			}
-		}
-		// We failed to understand the world target...
-		else
-		{
-			throw new Exception(Util.i18n("playerNotFound"));
-		}
+        // Inform the sender of the change
+        if (ticks == null) {
+            sender.sendMessage(Util.format("pTimeReset", msg.toString()));
+        } else {
+            String time = DescParseTickFormat.format(ticks);
+            if (!relative) {
+                sender.sendMessage(Util.format("pTimeSetFixed", time, msg.toString()));
+            } else {
+                sender.sendMessage(Util.format("pTimeSet", time, msg.toString()));
+            }
+        }
+    }
 
-		return users;
-	}
+    /**
+     * Used to parse an argument of the type "users(s) selector"
+     */
+    private Set<User> getUsers(final Server server, final CommandSender sender, final String selector) throws Exception {
+        final Set<User> users = new TreeSet<User>(new UserNameComparator());
+        // If there is no selector we want the sender itself. Or all users if sender isn't a user.
+        if (selector == null) {
+            final User user = ess.getUser(sender);
+            if (user == null) {
+                for (Player player : server.getOnlinePlayers()) {
+                    users.add(ess.getUser(player));
+                }
+            } else {
+                users.add(user);
+            }
+            return users;
+        }
+
+        // Try to find the user with name = selector
+        User user = null;
+        final List<Player> matchedPlayers = server.matchPlayer(selector);
+        if (!matchedPlayers.isEmpty()) {
+            user = ess.getUser(matchedPlayers.get(0));
+        }
+
+        if (user != null) {
+            users.add(user);
+        }
+        // If that fails, Is the argument something like "*" or "all"?
+        else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) {
+            for (Player player : server.getOnlinePlayers()) {
+                users.add(ess.getUser(player));
+            }
+        }
+        // We failed to understand the world target...
+        else {
+            throw new Exception(Util.i18n("playerNotFound"));
+        }
+
+        return users;
+    }
 }
 
 
-class UserNameComparator implements Comparator<User>
-{
-	public int compare(User a, User b)
-	{
-		return a.getName().compareTo(b.getName());
-	}
+class UserNameComparator implements Comparator<User> {
+    public int compare(User a, User b) {
+        return a.getName().compareTo(b.getName());
+    }
 }

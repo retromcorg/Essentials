@@ -3,7 +3,7 @@ package com.earth2me.essentials;
 import org.bukkit.command.CommandSender;
 
 public interface IReplyTo {
-	public void setReplyTo(CommandSender user);
+    CommandSender getReplyTo();
 
-	public CommandSender getReplyTo();
+    void setReplyTo(CommandSender user);
 }

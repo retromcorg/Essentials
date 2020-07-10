@@ -6,25 +6,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class Commandburn extends EssentialsCommand
-{
-	public Commandburn()
-	{
-		super("burn");
-	}
+public class Commandburn extends EssentialsCommand {
+    public Commandburn() {
+        super("burn");
+    }
 
-	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
-	{
-		if (args.length < 2)
-		{
-			throw new NotEnoughArgumentsException();
-		}
+    @Override
+    protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+        if (args.length < 2) {
+            throw new NotEnoughArgumentsException();
+        }
 
-		for (Player p : server.matchPlayer(args[0]))
-		{
-			p.setFireTicks(Integer.parseInt(args[1]) * 20);
-			sender.sendMessage(Util.format("burnMsg", p.getDisplayName(), Integer.parseInt(args[1])));
-		}
-	}
+        for (Player p : server.matchPlayer(args[0])) {
+            p.setFireTicks(Integer.parseInt(args[1]) * 20);
+            sender.sendMessage(Util.format("burnMsg", p.getDisplayName(), Integer.parseInt(args[1])));
+        }
+    }
 }

@@ -1,118 +1,89 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IUser;
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
-import java.util.ArrayList;
-import java.util.List;
+import com.earth2me.essentials.*;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class Commandrepair extends EssentialsCommand
-{
-	public Commandrepair()
-	{
-		super("repair");
-	}
 
-	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
-	{
-		if (args.length < 1)
-		{
-			throw new NotEnoughArgumentsException();
-		}
+public class Commandrepair extends EssentialsCommand {
+    public Commandrepair() {
+        super("repair");
+    }
 
-		if (args[0].equalsIgnoreCase("hand"))
-		{
-			final ItemStack item = user.getItemInHand();
-			final String itemName = item.getType().toString().toLowerCase();
-			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
+    @Override
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
 
-			charge.isAffordableFor(user);
+        if (args[0].equalsIgnoreCase("hand")) {
+            final ItemStack item = user.getItemInHand();
+            final String itemName = item.getType().toString().toLowerCase();
+            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
-			repairItem(item);
+            charge.isAffordableFor(user);
 
-			charge.charge(user);
+            repairItem(item);
 
-			user.sendMessage(Util.format("repair", itemName.replace('_', ' ')));
-		}
-		else if (args[0].equalsIgnoreCase("all"))
-		{
-			final List<String> repaired = new ArrayList<String>();
-			repairItems(user.getInventory().getContents(), user, repaired);
+            charge.charge(user);
 
-			repairItems(user.getInventory().getArmorContents(), user, repaired);
+            user.sendMessage(Util.format("repair", itemName.replace('_', ' ')));
+        } else if (args[0].equalsIgnoreCase("all")) {
+            final List<String> repaired = new ArrayList<String>();
+            repairItems(user.getInventory().getContents(), user, repaired);
 
-			if (repaired.isEmpty())
-			{
-				throw new Exception(Util.format("repairNone"));
-			}
-			else
-			{
-				user.sendMessage(Util.format("repair", Util.joinList(repaired)));
-			}
+            repairItems(user.getInventory().getArmorContents(), user, repaired);
 
-		}
-		else
-		{
-			throw new NotEnoughArgumentsException();
-		}
-	}
+            if (repaired.isEmpty()) {
+                throw new Exception(Util.format("repairNone"));
+            } else {
+                user.sendMessage(Util.format("repair", Util.joinList(repaired)));
+            }
 
-	private void repairItem(final ItemStack item) throws Exception
-	{
-		final Material material = Material.getMaterial(item.getTypeId());
-		if (material.isBlock() || material.getMaxDurability() < 0)
-		{
-			throw new Exception(Util.i18n("repairInvalidType"));
-		}
+        } else {
+            throw new NotEnoughArgumentsException();
+        }
+    }
 
-		if (item.getDurability() == 0)
-		{
-			throw new Exception(Util.i18n("repairAlreadyFixed"));
-		}
+    private void repairItem(final ItemStack item) throws Exception {
+        final Material material = Material.getMaterial(item.getTypeId());
+        if (material.isBlock() || material.getMaxDurability() < 0) {
+            throw new Exception(Util.i18n("repairInvalidType"));
+        }
 
-		item.setDurability((short)0);
-	}
+        if (item.getDurability() == 0) {
+            throw new Exception(Util.i18n("repairAlreadyFixed"));
+        }
 
-	private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired)
-	{
-		for (ItemStack item : items)
-		{
-			final String itemName = item.getType().toString().toLowerCase();
-			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
-			try
-			{
-				charge.isAffordableFor(user);
-			}
-			catch (ChargeException ex)
-			{
-				user.sendMessage(ex.getMessage());
-				continue;
-			}
+        item.setDurability((short) 0);
+    }
 
-			try
-			{
-				repairItem(item);
-			}
-			catch (Exception e)
-			{
-				continue;
-			}
-			try
-			{
-				charge.charge(user);
-			}
-			catch (ChargeException ex)
-			{
-				user.sendMessage(ex.getMessage());
-			}
-			repaired.add(itemName.replace('_', ' '));
-		}
-	}
+    private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) {
+        for (ItemStack item : items) {
+            final String itemName = item.getType().toString().toLowerCase();
+            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
+            try {
+                charge.isAffordableFor(user);
+            } catch (ChargeException ex) {
+                user.sendMessage(ex.getMessage());
+                continue;
+            }
+
+            try {
+                repairItem(item);
+            } catch (Exception e) {
+                continue;
+            }
+            try {
+                charge.charge(user);
+            } catch (ChargeException ex) {
+                user.sendMessage(ex.getMessage());
+            }
+            repaired.add(itemName.replace('_', ' '));
+        }
+    }
 }
