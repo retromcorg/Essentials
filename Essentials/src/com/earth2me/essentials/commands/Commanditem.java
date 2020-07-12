@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.johnymuffin.essentials.ESSAdv;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -41,5 +42,15 @@ public class Commanditem extends EssentialsCommand {
         user.sendMessage(Util.format("itemSpawn", stack.getAmount(), itemName));
         user.getInventory().addItem(stack);
         user.updateInventory();
+
+        try {
+            String issuer = (user instanceof org.bukkit.entity.Player) ? user.getName() : "Console";
+            String message = String.valueOf(issuer + " Has given thyself " + stack.getAmount() + " " + itemName);
+            ESSAdv.sendDiscordEmbed("Essentials - Item Command", message, "Essentials Log By Rhys B");
+        } catch (Exception e) {
+            user.sendMessage(e + ": " + e.getMessage());
+        }
+
+
     }
 }

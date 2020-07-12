@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.johnymuffin.essentials.ESSAdv;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -46,5 +47,13 @@ public class Commandgive extends EssentialsCommand {
         sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
         giveTo.getInventory().addItem(stack);
         giveTo.updateInventory();
+
+        try {
+            String issuer = (sender instanceof Player) ? ((Player)sender).getName() : "Console";
+            String message = String.valueOf("Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getName() + "\nCommand Issued By: " + issuer);
+            ESSAdv.sendDiscordEmbed("Essentials - Give Command", message, "Essentials Log By Rhys B");
+        } catch (Exception e) {
+            sender.sendMessage(e + ": " + e.getMessage());
+        }
     }
 }

@@ -27,6 +27,8 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import com.johnymuffin.essentials.ESSAdv;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -213,6 +215,9 @@ public class Essentials extends JavaPlugin implements IEssentials {
             getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
         }
         LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+            new ESSAdv(this); //Initialize Essentials Advanced Module
+        }, 0L);
     }
 
     @Override

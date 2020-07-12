@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.johnymuffin.essentials.ESSAdv;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,6 +49,11 @@ public class Commandban extends EssentialsCommand {
             User u = ess.getUser(p);
             if (u.isAuthorized("essentials.ban.notify")) {
                 p.sendMessage(Util.format("playerBanned", senderName, player.getName(), banReason));
+                try {
+                    ESSAdv.sendDiscordEmbed("Essentials - Ban Command", Util.format("playerBanned", senderName, player.getName(), banReason), "Essentials Log By Rhys B");
+                } catch (Exception e) {
+                    sender.sendMessage(e + ": " + e.getMessage());
+                }
             }
         }
     }
