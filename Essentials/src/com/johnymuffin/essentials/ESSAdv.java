@@ -28,6 +28,8 @@ public class ESSAdv {
             if (!Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
                 logInfo(Level.WARNING, "Fundamentals economy support is enabled however the Fundamentals plugin couldn't be found. Disabling Fundamentals Economy support");
                 config.setConfigOptionAndSave("use-fundamentals-economy", false);
+            } else {
+                logInfo(Level.INFO, "Hooking into Fundamentals for economy calls.");
             }
         }
 
@@ -48,7 +50,7 @@ public class ESSAdv {
 
     public static void sendDiscordEmbed(String title, String description, String footer) {
         ESSAdvConfig config = ESSAdvConfig.getInstance();
-        if(!config.getConfigBoolean("discord.enable")) {
+        if (!config.getConfigBoolean("discord.enable")) {
             return;
         }
         DiscordCore Core = (DiscordCore) Bukkit.getServer().getPluginManager().getPlugin("DiscordCore");
