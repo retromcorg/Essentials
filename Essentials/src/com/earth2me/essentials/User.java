@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
 import com.johnymuffin.beta.fundamentals.Fundamentals;
+import com.johnymuffin.beta.fundamentals.api.EconomyAPI;
 import com.johnymuffin.essentials.ESSAdvConfig;
 import com.projectposeidon.api.PoseidonUUID;
 import org.bukkit.Bukkit;
@@ -256,7 +257,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
                 Fundamentals fundamentals = (Fundamentals) Bukkit.getServer().getPluginManager().getPlugin("Fundamentals");
                 fundamentals.debugLogger(Level.INFO, "Overriding Essentials Get Money For " + this.getName(), 3);
-                return fundamentals.getPlayerMap().getPlayer(PoseidonUUID.getPlayerGracefulUUID(this.getName())).getBalance();
+                EconomyAPI.BalanceWrapper wrapper = fundamentals.getEconomyAPI().getBalance(PoseidonUUID.getPlayerGracefulUUID(this.getName()));
+                if (wrapper.getEconomyResult().equals(EconomyAPI.EconomyResult.successful)) {
+                    return wrapper.getBalance();
+                } else {
+                    return 0d;
+                }
             }
         }
 
