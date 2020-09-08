@@ -336,4 +336,14 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public boolean isAutoSave() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setAutoSave(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

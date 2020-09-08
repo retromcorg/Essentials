@@ -2,7 +2,7 @@ package com.johnymuffin.essentials;
 
 import com.earth2me.essentials.Essentials;
 import com.johnymuffin.discordcore.DiscordCore;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.Bukkit;
 
 import java.awt.*;
@@ -59,7 +59,7 @@ public class ESSAdv {
         eb.setColor(Color.RED);
         eb.setDescription(description);
         eb.setFooter(footer, null);
-        Core.Discord().DiscordSendEmbedToChannel(config.getConfigString("discord.channel-id"), eb);
+        Core.Discord().jda.getTextChannelById(config.getConfigString("discord.channel-id")).sendMessage(eb.build()).queue();
     }
 
 

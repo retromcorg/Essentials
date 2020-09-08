@@ -1,10 +1,8 @@
 package com.earth2me.essentials;
 
 import com.avaje.ebean.config.ServerConfig;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
@@ -31,9 +29,24 @@ public class FakeServer implements Server
 	private List<Player> players = new ArrayList<Player>();
 	private final List<World> worlds = new ArrayList<World>();
 
+	@Override
+	public String getGameVersion() {
+		return null;
+	}
+
 	public String getName()
 	{
 		return "Test Server";
+	}
+
+	@Override
+	public String getServerEnvironment() {
+		return null;
+	}
+
+	@Override
+	public String getPoseidonVersion() {
+		return null;
 	}
 
 	public String getVersion()
@@ -101,6 +114,16 @@ public class FakeServer implements Server
 				return player;
 			}
 		}
+		return null;
+	}
+
+	@Override
+	public Player getPlayer(UUID uuid) {
+		return null;
+	}
+
+	@Override
+	public Player getPlayerExact(String s) {
 		return null;
 	}
 
@@ -362,6 +385,21 @@ public class FakeServer implements Server
 	}
 
 	@Override
+	public void setWhitelist(boolean b) {
+
+	}
+
+	@Override
+	public Set<org.bukkit.OfflinePlayer> getWhitelistedPlayers() {
+		return null;
+	}
+
+	@Override
+	public void reloadWhitelist() {
+
+	}
+
+	@Override
 	public MapView getMap(short s)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -377,5 +415,40 @@ public class FakeServer implements Server
 	public boolean getAllowFlight()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void shutdown() {
+
+	}
+
+	@Override
+	public int broadcast(String s, String s1) {
+		return 0;
+	}
+
+	@Override
+	public org.bukkit.OfflinePlayer getOfflinePlayer(String s) {
+		return null;
+	}
+
+	@Override
+	public Set<String> getIPBans() {
+		return null;
+	}
+
+	@Override
+	public void banIP(String s) {
+
+	}
+
+	@Override
+	public void unbanIP(String s) {
+
+	}
+
+	@Override
+	public Set<org.bukkit.OfflinePlayer> getBannedPlayers() {
+		return null;
 	}
 }

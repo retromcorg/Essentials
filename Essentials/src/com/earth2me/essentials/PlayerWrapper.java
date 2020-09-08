@@ -49,6 +49,22 @@ public class PlayerWrapper implements Player {
         return base.getName();
     }
 
+    public boolean isBanned() {
+        return base.isBanned();
+    }
+
+    public void setBanned(boolean b) {
+        base.setBanned(b);
+    }
+
+    public boolean isWhitelisted() {
+        return base.isWhitelisted();
+    }
+
+    public void setWhitelisted(boolean b) {
+        base.setWhitelisted(b);
+    }
+
     @Override
     public PlayerInventory getInventory() {
         return base.getInventory();
@@ -444,6 +460,10 @@ public class PlayerWrapper implements Player {
         return base.getUniqueId();
     }
 
+    public UUID getPlayerUUID() {
+        return getUniqueId();
+    }
+
     public void playNote(Location lctn, Instrument i, Note note) {
         base.playNote(lctn, i, note);
     }
@@ -462,6 +482,10 @@ public class PlayerWrapper implements Player {
 
     public boolean isPlayerTimeRelative() {
         return base.isPlayerTimeRelative();
+    }
+
+    public boolean isUsingReleaseToBeta() {
+        return base.isUsingReleaseToBeta();
     }
 
     public void resetPlayerTime() {

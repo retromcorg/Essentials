@@ -65,6 +65,26 @@ public class OfflinePlayer implements Player {
         return name;
     }
 
+    @Override
+    public boolean isBanned() {
+        return false;
+    }
+
+    @Override
+    public void setBanned(boolean b) {
+
+    }
+
+    @Override
+    public boolean isWhitelisted() {
+        return false;
+    }
+
+    @Override
+    public void setWhitelisted(boolean b) {
+
+    }
+
     public PlayerInventory getInventory() {
         return null;
     }
@@ -389,6 +409,11 @@ public class OfflinePlayer implements Player {
         return uniqueId;
     }
 
+    @Override
+    public UUID getPlayerUUID() {
+        return null;
+    }
+
     public void playNote(Location lctn, Instrument i, Note note) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -407,6 +432,11 @@ public class OfflinePlayer implements Player {
 
     public boolean isPlayerTimeRelative() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isUsingReleaseToBeta() {
+        return false;
     }
 
     public void resetPlayerTime() {
