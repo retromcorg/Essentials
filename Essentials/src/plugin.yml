@@ -6,7 +6,7 @@ version: 2.6.8
 website: http://www.earth2me.net:8001/
 description: Provides an essential, core set of commands for Bukkit.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
-softdepend: [Fundamentals]
+softdepend: [Fundamentals, JPerms]
 commands:
   afk:
     description: Marks you as away-from-keyboard.

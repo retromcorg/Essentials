@@ -85,6 +85,15 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
 
+        final Plugin permJohnyPermsPlugin = pluginManager.getPlugin("JPerms");
+        if (permJohnyPermsPlugin != null && permJohnyPermsPlugin.isEnabled()) {
+            if (!(handler instanceof JohnyPermsHandler)) {
+                LOGGER.log(Level.INFO, "Essentials: Using JohnyPerms based permissions.");
+                handler = new JohnyPermsHandler();
+            }
+            return;
+        }
+
         final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
         if (permExPlugin != null && permExPlugin.isEnabled()) {
             if (!(handler instanceof PermissionsExHandler)) {
