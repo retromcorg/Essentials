@@ -307,7 +307,7 @@ public class Essentials extends JavaPlugin implements IEssentials {
                     }
                     online.append(p.getDisplayName());
                 }
-                m = m.replace("{PLAYERLIST}", online.toString());
+                m = m.replace("{PLAYERLIST}", online.toString()).replaceAll("(&([a-f0-9]))", "\u00A7$2");
             }
 
             if (sender instanceof Player) {
