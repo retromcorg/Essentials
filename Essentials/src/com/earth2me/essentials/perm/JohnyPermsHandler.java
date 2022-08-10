@@ -11,7 +11,7 @@ public class JohnyPermsHandler implements IPermissionsHandler {
     private final transient JohnyPermsAPI api;
 
     public JohnyPermsHandler() {
-        this.api = JohnyPerms.getJohnyPermsAPI();
+        this.api = JohnyPerms.getJPermsAPI();
     }
 
 
@@ -29,7 +29,7 @@ public class JohnyPermsHandler implements IPermissionsHandler {
 
     @Override
     public boolean canBuild(Player base, String group) {
-        return base.hasPermission("essentials.build");
+        return base.hasPermission("essentials.build") || base.isOp();
     }
 
     @Override

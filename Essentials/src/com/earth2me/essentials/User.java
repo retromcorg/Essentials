@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 import java.util.logging.Level;
 
 
@@ -257,7 +258,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
                 Fundamentals fundamentals = (Fundamentals) Bukkit.getServer().getPluginManager().getPlugin("Fundamentals");
                 fundamentals.debugLogger(Level.INFO, "Overriding Essentials Get Money For " + this.getName(), 3);
-                EconomyAPI.BalanceWrapper wrapper = fundamentals.getEconomyAPI().getBalance(PoseidonUUID.getPlayerGracefulUUID(this.getName()));
+                UUID uuid = fundamentals.getPlayerUUID(this.getName()); //Case-insensitive lookup from Fundamentals UUID Cache
+                EconomyAPI.BalanceWrapper wrapper = fundamentals.getEconomyAPI().getBalance(uuid);
                 if (wrapper.getEconomyResult().equals(EconomyAPI.EconomyResult.successful)) {
                     return wrapper.getBalance();
                 } else {
@@ -286,7 +288,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Fundamentals")) {
                 Fundamentals fundamentals = (Fundamentals) Bukkit.getServer().getPluginManager().getPlugin("Fundamentals");
                 fundamentals.debugLogger(Level.INFO, "Overriding Essentials Set Money For " + this.getName(), 3);
-                fundamentals.getPlayerMap().getPlayer(PoseidonUUID.getPlayerGracefulUUID(this.getName())).setBalance(value);
+                UUID uuid = fundamentals.getPlayerUUID(this.getName()); //Case-insensitive lookup from Fundamentals UUID Cache
+                fundamentals.getPlayerMap().getPlayer(uuid).setBalance(value);
                 return;
             }
         }
