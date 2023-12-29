@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -94,7 +95,7 @@ public class SignBlockListener extends BlockListener {
         // If player is muted and they are trying to place a sign, cancel the event. (RetroMC Start)
         User user = ess.getUser(event.getPlayer());
         if (user.isMuted() && (event.getBlockPlaced().getType() == Material.SIGN || event.getBlockPlaced().getType() == Material.SIGN_POST || event.getBlockPlaced().getType() == Material.WALL_SIGN)) {
-            event.getPlayer().sendMessage("&cYou are muted and cannot place signs.");
+            event.getPlayer().sendMessage(Util.i18n("voiceSilenced").replace("&", "\u00a7")); //Unsure if the replace is needed, but it's there just in case.
             event.setCancelled(true);
             return;
         }
