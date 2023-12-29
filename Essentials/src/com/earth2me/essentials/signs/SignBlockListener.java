@@ -91,6 +91,15 @@ public class SignBlockListener extends BlockListener {
             return;
         }
 
+        // If player is muted and they are trying to place a sign, cancel the event. (RetroMC Start)
+        User user = ess.getUser(event.getPlayer());
+        if (user.isMuted() && (event.getBlockPlaced().getType() == Material.SIGN || event.getBlockPlaced().getType() == Material.SIGN_POST || event.getBlockPlaced().getType() == Material.WALL_SIGN)) {
+            event.getPlayer().sendMessage("&cYou are muted and cannot place signs.");
+            event.setCancelled(true);
+            return;
+        }
+        // (RetroMC End)
+
         final Block against = event.getBlockAgainst();
         if ((against.getType() == Material.WALL_SIGN
                 || against.getType() == Material.SIGN_POST)
