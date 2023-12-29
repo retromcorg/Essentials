@@ -20,6 +20,15 @@ public class Commandr extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
+        // (RetroMC Start)
+        if (sender instanceof Player) {
+            User user = ess.getUser(sender);
+            if (user.isMuted()) {
+                throw new Exception(Util.i18n("voiceSilenced"));
+            }
+        }
+        // (RetroMC End)
+
         String message = getFinalArg(args, 0);
         IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
         String senderName = sender instanceof Player ? ((Player) sender).getDisplayName() : Console.NAME;
