@@ -215,6 +215,19 @@ public class EssentialsPlayerListener extends PlayerListener {
             return;
         }
 
+        //Remove socialspy/god if they no longer have permission
+        if (!user.isAuthorized("essentials.socialspy") && user.isSocialSpyEnabled()) {
+            LOGGER.log(Level.INFO, "Socialspy has been removed for " + user.getName() + " because they no longer have permission.");
+            user.setSocialSpyEnabled(false);
+            user.sendMessage(Util.i18n("§7SocialSpy " + Util.i18n("disabled")));
+        }
+
+        if (!user.isAuthorized("essentials.god") && user.isGodModeEnabled()) {
+            LOGGER.log(Level.INFO, "God has been removed for " + user.getName() + " because they no longer have permission.");
+            user.setGodModeEnabled(false);
+            user.sendMessage(Util.i18n("§7godMode " + Util.i18n("disabled")));
+        }
+
         if (ess.getSettings().changeDisplayName()) {
             user.setDisplayName(user.getNick().replaceAll("(&([a-f0-9]))", "\u00A7$2"));
         }
