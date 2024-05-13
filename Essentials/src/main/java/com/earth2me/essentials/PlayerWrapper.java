@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.projectposeidon.ConnectionType;
+import net.minecraft.server.Packet;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -484,12 +486,42 @@ public class PlayerWrapper implements Player {
         return base.isPlayerTimeRelative();
     }
 
+    @Override
+    public ConnectionType getConnectionType() {
+        return null;
+    }
+
+    @Override
+    public boolean hasReceivedPacket0() {
+        return false;
+    }
+
     public boolean isUsingReleaseToBeta() {
         return base.isUsingReleaseToBeta();
     }
 
     public void resetPlayerTime() {
         base.resetPlayerTime();
+    }
+
+    @Override
+    public void hidePlayer(Player player) {
+
+    }
+
+    @Override
+    public void showPlayer(Player player) {
+
+    }
+
+    @Override
+    public boolean canSee(Player player) {
+        return false;
+    }
+
+    @Override
+    public void sendPacket(Player player, Packet packet) {
+
     }
 
     public boolean isPermissionSet(String string) {

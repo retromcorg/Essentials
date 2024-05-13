@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.projectposeidon.ConnectionType;
+import net.minecraft.server.Packet;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -435,12 +437,42 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public ConnectionType getConnectionType() {
+        return null;
+    }
+
+    @Override
+    public boolean hasReceivedPacket0() {
+        return false;
+    }
+
+    @Override
     public boolean isUsingReleaseToBeta() {
         return false;
     }
 
     public void resetPlayerTime() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void hidePlayer(Player player) {
+
+    }
+
+    @Override
+    public void showPlayer(Player player) {
+
+    }
+
+    @Override
+    public boolean canSee(Player player) {
+        return false;
+    }
+
+    @Override
+    public void sendPacket(Player player, Packet packet) {
+
     }
 
     public boolean isPermissionSet(String string) {
