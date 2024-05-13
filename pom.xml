@@ -4,22 +4,24 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.earth2me.essentialss</groupId>
     <artifactId>essentials-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.6.8-RETROMC-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>Essentials</module>
-<!--        <module>EssentialsChat</module>-->
-<!--        <module>EssentialsGeoIP</module>-->
+        <module>EssentialsChat</module>
+        <module>EssentialsGeoIP</module>
+        <module>EssentialsProtect</module>
+        <module>EssentialsSpawn</module>
         <!-- Add other modules here -->
     </modules>
 
     <dependencies>
         <dependency>
-            <groupId>com.legacyminecraft.poseidon</groupId>
-            <artifactId>poseidon-craftbukkit</artifactId>
-            <version>1.1.8</version>
-            <scope>provided</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <!-- Any other common dependencies -->
     </dependencies>
@@ -46,6 +48,11 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>dv8tion</id>
+            <name>m2-dv8tion</name>
+            <url>https://m2.dv8tion.net/releases</url>
         </repository>
     </repositories>
 </project>
