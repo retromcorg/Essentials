@@ -26,10 +26,14 @@ public class Commandr extends EssentialsCommand {
             if (user.isMuted()) {
                 throw new Exception(Util.i18n("voiceSilenced"));
             }
+
+            if (user.isAuthorized("essentials.chat.color"))
+            {
+                message = (message.replaceAll("&([0-9a-f])", "§$1"));
+            }
         }
         // (RetroMC End)
 
-        String message = getFinalArg(args, 0);
         IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
         String senderName = sender instanceof Player ? ((Player) sender).getDisplayName() : Console.NAME;
         CommandSender target = replyTo.getReplyTo();
