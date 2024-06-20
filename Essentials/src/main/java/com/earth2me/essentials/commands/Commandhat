@@ -1,0 +1,88 @@
+package com.earth2me.essentials.commands;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+import com.earth2me.essentials.User;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.material.MaterialData;
+import org.bukkit.Server;
+
+public class Commandhat extends EssentialsCommand {
+    public Commandhat() {
+        super("hat");
+    }
+
+    @Override
+    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+        Player player = null;
+        if (user instanceof Player) {
+            player = (Player)user;
+        }
+
+        if (this.checkPermission(user, "blockhat.hat")) {
+            this.placeOnHead(player, player.getItemInHand());
+        } else {
+            user.sendMessage(ChatColor.DARK_RED + "Your not allowed to use that command");
+        }
+    }
+
+    boolean checkPermission(CommandSender sender, String node) {
+        if (sender instanceof Player) {
+            User user = ess.getUser(sender);
+            return (user.isAuthorized(node));
+        }
+        return false;
+    }
+
+    private boolean placeOnHead(Player player, ItemStack item) {
+        PlayerInventory inv = player.getInventory();
+        if (item.getType() == Material.AIR) {
+            player.sendMessage(ChatColor.RED + "Why would you want air on your head?");
+            return false;
+        } else {
+            int id = item.getTypeId();
+            if (id >= 0 && id <= 255) {
+                ItemStack helmet = inv.getHelmet();
+                ItemStack hat = new ItemStack(item.getType(), item.getAmount() < 0 ? item.getAmount() : 1, item.getDurability());
+                MaterialData data = item.getData();
+                if (data != null) {
+                    hat.setData(item.getData());
+                }
+
+                inv.setHelmet(hat);
+                if (item.getAmount() > 1) {
+                    item.setAmount(item.getAmount() - 1);
+                } else {
+                    inv.remove(item);
+                }
+
+                if (helmet.getAmount() > 0) {
+                    HashMap<Integer, ItemStack> leftover = inv.addItem(new ItemStack[]{helmet});
+                    if (!leftover.isEmpty()) {
+                        player.sendMessage("Was unble to put the old hat away, droping it at your feet");
+
+                        for (Entry<Integer, ItemStack> e : leftover.entrySet()) {
+                            player.getWorld().dropItem(player.getLocation(), e.getValue());
+                        }
+                    }
+                }
+
+                player.sendMessage("Enjoy your new hat!");
+                return true;
+            } else {
+                player.sendMessage(ChatColor.RED + "You can't put that item on your head silly!");
+                return false;
+            }
+        }
+    }
+
+    public ItemStack stackFromString(String item, int count) {
+        Material material = Material.matchMaterial(item);
+        return material == null ? null : new ItemStack(material, count);
+    }
+}
