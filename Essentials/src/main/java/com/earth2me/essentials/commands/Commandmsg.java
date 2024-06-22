@@ -30,6 +30,19 @@ public class Commandmsg extends EssentialsCommand {
         }
 
         String message = getFinalArg(args, 1);
+
+        if (sender instanceof Player) {
+            User user = ess.getUser(sender);
+            if (user.isMuted()) {
+                throw new Exception(Util.i18n("voiceSilenced"));
+            }
+
+            if (user.isAuthorized("essentials.chat.color"))
+            {
+                message = (message.replaceAll("&([0-9a-f])", "§$1"));
+            }
+        }
+        
         String translatedMe = Util.i18n("me");
 
         IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
