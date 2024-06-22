@@ -20,6 +20,8 @@ public class Commandr extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
+        String message = getFinalArg(args, 0);
+        
         // (RetroMC Start)
         if (sender instanceof Player) {
             User user = ess.getUser(sender);
