@@ -107,6 +107,9 @@ commands:
     description: Enables your godly powers.
     usage: /<command>
     aliases: [tgm,godmode,egod,egodmode,etgm]
+  hat:
+    description: Puts the held block on the players head.
+    usage: /<command>
   heal:
     description: Heals you or the given player.
     usage: /<command> <player>
@@ -127,6 +130,10 @@ commands:
     description: Ignore other players.
     usage: /<command> <player>
     aliases: [eignore]
+  ignorelist:
+    description: Lists your ignored players.
+    usage: /<command>
+    aliases: [eignorelist]
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]
