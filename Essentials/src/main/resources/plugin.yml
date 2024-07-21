@@ -107,9 +107,6 @@ commands:
     description: Enables your godly powers.
     usage: /<command>
     aliases: [tgm,godmode,egod,egodmode,etgm]
-  hat:
-    description: Puts the held block on the players head.
-    usage: /<command>
   heal:
     description: Heals you or the given player.
     usage: /<command> <player>
