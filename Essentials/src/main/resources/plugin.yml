@@ -127,6 +127,10 @@ commands:
     description: Ignore other players.
     usage: /<command> <player>
     aliases: [eignore]
+  ignorelist:
+    description: Lists your ignored players.
+    usage: /<command>
+    aliases: [eignorelist]
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]
