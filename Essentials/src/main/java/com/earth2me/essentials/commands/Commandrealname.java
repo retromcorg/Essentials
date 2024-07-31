@@ -30,6 +30,6 @@ public class Commandrealname extends EssentialsCommand {
             user.sendMessage(u.getDisplayName() + " " + Util.i18n("is") + " " + u.getName());
             found++;
         }
-        if(found == 0) user.sendMessage(ChatColor.DARK_RED + "Could not a user with the nickname " + ChatColor.DARK_BLUE + args[0]);
+        if(found == 0) user.sendMessage(ChatColor.DARK_RED + "Could not find a user with the nickname " + ChatColor.DARK_BLUE + args[0]);
     }
 }
