@@ -17,19 +17,19 @@ public class Commandrealname extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+        int found = 0;
         final String whois = args[0].toLowerCase();
         for (Player p : server.getOnlinePlayers()) {
             final User u = ess.getUser(p);
             if (u.isHidden()) {
                 continue;
             }
-            final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase();
-            if (!whois.equals(displayName)
-                    && !displayName.equals(ChatColor.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
-                    && !whois.equalsIgnoreCase(u.getName())) {
-                continue;
-            }
+            final String displayName =
+                    u.getNickname() == null ? u.getName().toLowerCase() : u.getNickname().replaceAll("&([0-9a-f])", "").toLowerCase();
+            if (!whois.equals(displayName) && !whois.equalsIgnoreCase(u.getName())) continue;
             user.sendMessage(u.getDisplayName() + " " + Util.i18n("is") + " " + u.getName());
+            found++;
         }
+        if(found == 0) user.sendMessage(ChatColor.DARK_RED + "Could not find a user with the nickname " + ChatColor.DARK_BLUE + args[0]);
     }
 }
