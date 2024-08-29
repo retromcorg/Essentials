@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.Warps;
+import com.earth2me.essentials.LostAndFoundWarps;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ public class Commandlost extends EssentialsCommand {
 
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        Warps lostAndFoundWarps = ess.getLostAndFoundWarps();
+        LostAndFoundWarps lostAndFoundWarps = ess.getLostAndFoundWarps();
         if (lostAndFoundWarps.isEmpty()) {
-            throw new Exception(Util.i18n("noWarpsDefined"));
+            throw new Exception(Util.i18n("noLostWarpsDefined"));
         }
 
         if (args.length == 0) {
@@ -33,7 +33,7 @@ public class Commandlost extends EssentialsCommand {
             if (Character.isLetterOrDigit(firstChar) || firstChar == '_') {
                 warpUser(user, String.valueOf(firstChar));
             } else {
-                throw new Exception(Util.i18n("warpNotExist"));
+                throw new Exception(Util.i18n("lostWarpNotExist"));
             }
         }
     }
