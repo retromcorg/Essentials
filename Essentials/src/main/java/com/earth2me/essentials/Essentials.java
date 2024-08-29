@@ -69,7 +69,7 @@ public class Essentials extends JavaPlugin implements IEssentials {
     private transient Spawn spawn;
     private transient Jail jail;
     private transient Warps warps;
-    private transient Warps lostAndFoundWarps;
+    private transient LostAndFoundWarps lostAndFoundWarps;
     private transient Worth worth;
     private transient List<IConf> confList;
     private transient Backup backup;
@@ -123,7 +123,7 @@ public class Essentials extends JavaPlugin implements IEssentials {
         confList.add(spawn);
         warps = new Warps(getServer(), this.getDataFolder());
         confList.add(warps);
-        lostAndFoundWarps = new Warps(getServer(), this.getDataFolder());
+        lostAndFoundWarps = new LostAndFoundWarps(getServer(), this.getDataFolder());
         confList.add(lostAndFoundWarps);
         worth = new Worth(this.getDataFolder());
         confList.add(worth);
@@ -454,7 +454,7 @@ public class Essentials extends JavaPlugin implements IEssentials {
     }
 
     @Override
-    public Warps getLostAndFoundWarps() {
+    public LostAndFoundWarps getLostAndFoundWarps() {
         return lostAndFoundWarps;
     }
 
