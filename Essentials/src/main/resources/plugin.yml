@@ -68,6 +68,9 @@ commands:
     description: Removes a jail
     usage: /<command> [jailname]
     aliases: [edeljail]
+  dellost:
+    description: Deletes the specified lost and found warp.
+    usage: /<command> [warp]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> [warp]
@@ -175,6 +178,9 @@ commands:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
     aliases: [strike,smite,elightning,estrike,esmite]
+  lost:
+    description: Teleports to the specified location in lost and found
+    usage: /<command> [warp]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
@@ -255,6 +261,9 @@ commands:
     description: Creates a jail where you specified named [jailname]
     usage: /<command> [jailname]
     aliases: [esetjail]
+  setlost:
+    description: Creates a new lost and found warp.
+    usage: /<command> [warp]
   setwarp:
     description: Creates a new warp.
     usage: /<command> [warp]

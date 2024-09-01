@@ -89,6 +89,12 @@ public class Teleport implements Runnable {
         user.sendMessage(Util.format("warpingTo", warp));
     }
 
+    public void lostAndFoundWarp(String warp, Trade chargeFor) throws Exception {
+        Location loc = ess.getLostAndFoundWarps().getWarp(warp);
+        teleport(new Target(loc), chargeFor);
+        user.sendMessage(Util.format("warpingTo", warp));
+    }
+
     public void cooldown(boolean check) throws Exception {
         Calendar now = new GregorianCalendar();
         if (user.getLastTeleportTimestamp() > 0) {

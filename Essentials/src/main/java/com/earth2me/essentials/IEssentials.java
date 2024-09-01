@@ -36,6 +36,8 @@ public interface IEssentials extends Plugin {
 
     Warps getWarps();
 
+    LostAndFoundWarps getLostAndFoundWarps();
+
     Worth getWorth();
 
     Backup getBackup();
