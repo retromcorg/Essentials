@@ -183,7 +183,7 @@ commands:
     usage: /<command> [warp]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|send [to] [message]]
+    usage: /<command> [read|clear|send|discord] [to] [message]]
     aliases: [email]
   me:
     description: Describes an action in the context of the player.
