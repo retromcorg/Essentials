@@ -5,11 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -40,6 +38,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private String geolocation;
     private boolean isSocialSpyEnabled;
     private boolean isNPC;
+
+    private UUID uuid;
+    private boolean receiveMailOnDiscord;
 
     protected UserData(Player base, IEssentials ess) {
         super(base, ess);
@@ -77,6 +78,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
         geolocation = _getGeoLocation();
         isSocialSpyEnabled = _isSocialSpyEnabled();
         isNPC = _isNPC();
+        uuid = _getUUID();
+        receiveMailOnDiscord = _getReceiveMailOnDiscord();
     }
 
     private double _getMoney() {
@@ -617,4 +620,48 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.setProperty("npc", set);
         config.save();
     }
+
+    public void setUUUID(UUID uuid) {
+        this.uuid = uuid;
+        config.setProperty("uuid", uuid.toString());
+        config.save();
+    }
+
+    @Nullable
+    private UUID _getUUID() {
+        String uuid = config.getString("uuid");
+        if (uuid == null) {
+            return null;
+        }
+
+        try {
+            return UUID.fromString(uuid);
+        } catch (IllegalArgumentException e) {
+            logger.warning("Invalid UUID in user data for " + getName() + ": " + uuid + ". UUID will be removed.");
+            config.removeProperty("uuid");
+            config.save();
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    private boolean _getReceiveMailOnDiscord() {
+        return config.getBoolean("receiveMailOnDiscord", true); // Default to true
+    }
+
+    public boolean getReceiveMailOnDiscord() {
+        return receiveMailOnDiscord;
+    }
+
+    public void setReceiveMailOnDiscord(boolean receiveMailOnDiscord) {
+        this.receiveMailOnDiscord = receiveMailOnDiscord;
+        config.setProperty("receiveMailOnDiscord", receiveMailOnDiscord);
+        config.save();
+    }
+
 }
