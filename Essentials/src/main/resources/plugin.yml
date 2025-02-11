@@ -119,10 +119,10 @@ commands:
   ignorelist:
     description: Lists your ignored players.
     usage: /<command>
-  info:
-    description: Shows information set by the server owner
-    usage: /<command> [chapter] [page]
-    aliases: [ifo,einfo,eabout,news,enews,eifo]
+#  info:
+#    description: Shows information set by the server owner
+#    usage: /<command> [chapter] [page]
+#    aliases: [ifo,einfo,eabout,news,enews,eifo]
   invsee:
     description: See the inventory of other players.
     usage: /<command> <player>
@@ -136,7 +136,7 @@ commands:
   jump:
     description: Jumps to the nearest block in the line of sight.
     usage: /<command>
-    aliases: [j,ejump]
+    aliases: [j]
   kick:
     description: Kicks a specified player with a reason.
     usage: /<command> <player> <reason>
@@ -165,11 +165,9 @@ commands:
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
-    aliases: [email]
 #  me:
 #    description: Describes an action in the context of the player.
 #    usage: /<command> [description]
-#    aliases: [eme]
   motd:
     description: Views the Message Of The Day.
     usage: /<command>
@@ -183,6 +181,7 @@ commands:
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> <player> [nickname|off]
+    aliases: [nickname]
   nuke:
     description: May death rain upon them.
     usage: /<command> <player>
@@ -196,7 +195,7 @@ commands:
   powertool:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [l:|a:|r:][command] <arguments>
-    aliases: [pt,epowertool,ept]
+    aliases: [pt]
   ptime:
     description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>
