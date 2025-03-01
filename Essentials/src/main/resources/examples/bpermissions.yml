@@ -26,6 +26,7 @@ groups:
     - essentials.kit.tools
     - essentials.mail
     - essentials.mail.send
+    - essentials.mail.discord
     - essentials.me
     - essentials.msg
     - essentials.nick
