@@ -1,21 +1,14 @@
-Essentials Development Readme
+Essentials B1.7.3 Development Readme
 =============================
 
-The official repository is at:
+Forked from:
 https://github.com/essentials/Essentials
 
-We use NetBeans 7 for development.
+Build Requirements:
+- An IDE of your choice
+- Maven 3.9.8 or later
 
-Recommended NetBeans plugins:
-
-* Git
-* PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
-
-You don't need to import settings.zip anymore, since the format guidelines have been added to the project properties.
-
-Windows users, please read this: http://help.github.com/line-endings/
-The default line ending is LF.
-
-To build all jars, select the BuildAll project and build that. You'll find all jars inside the dist/lib folder of the BuildAll project.
-
-If you create pull requests, always make them for the master branch.
+Build Instructions:
+```
+mvn clean package
+```
