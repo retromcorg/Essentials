@@ -2,115 +2,140 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.ChatColor;
+
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
-
 public class Commandlist extends EssentialsCommand {
+    private final String showHiddenPlayers_PermissionNode = "essentials.list.hidden";
+
     public Commandlist() {
         super("list");
     }
 
     @Override
-    public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
-        boolean showhidden = false;
-        if (sender instanceof Player) {
-            if (ess.getUser(sender).isAuthorized("essentials.list.hidden")) {
-                showhidden = true;
-            }
-        } else {
-            showhidden = true;
-        }
-        int playerHidden = 0;
-        for (Player p : server.getOnlinePlayers()) {
-            if (ess.getUser(p).isHidden()) {
-                playerHidden++;
-            }
-        }
-        //TODO: move these to messages file
-        StringBuilder online = new StringBuilder();
-        online.append(ChatColor.BLUE).append("There are ").append(ChatColor.RED).append(server.getOnlinePlayers().length - playerHidden);
-        if (showhidden && playerHidden > 0) {
-            online.append(ChatColor.GRAY).append("/").append(playerHidden);
-        }
-        online.append(ChatColor.BLUE).append(" out of a maximum ").append(ChatColor.RED).append(server.getMaxPlayers());
-        online.append(ChatColor.BLUE).append(" players online.");
-        sender.sendMessage(online.toString());
+    public void run(
+        Server server,
+        CommandSender sender,
+        String commandLabel,
+        String[] args
+    ) {
+        Player[] allPlayers = server.getOnlinePlayers();
 
-        if (ess.getSettings().getSortListByGroups()) {
-            Map<String, List<User>> sort = new HashMap<String, List<User>>();
-            for (Player p : server.getOnlinePlayers()) {
-                User u = ess.getUser(p);
-                if (u.isHidden() && !showhidden) {
-                    continue;
-                }
-                String group = u.getGroup();
-                List<User> list = sort.get(group);
-                if (list == null) {
-                    list = new ArrayList<User>();
-                    sort.put(group, list);
-                }
-                list.add(u);
-            }
-            String[] groups = sort.keySet().toArray(new String[0]);
-            Arrays.sort(groups, String.CASE_INSENSITIVE_ORDER);
-            for (String group : groups) {
-                StringBuilder groupString = new StringBuilder();
-                groupString.append(group).append(": ");
-                List<User> users = sort.get(group);
-                Collections.sort(users);
-                boolean first = true;
-                for (User user : users) {
-                    if (!first) {
-                        groupString.append(", ");
-                    } else {
-                        first = false;
-                    }
-                    if (user.isAfk()) {
-                        groupString.append("§7[AFK]§f");
-                    }
-                    if (user.isHidden()) {
-                        groupString.append("§7[HIDDEN]§f");
-                    }
-                    groupString.append(user.getDisplayName());
-                    groupString.append("§f");
-                }
-                sender.sendMessage(groupString.toString());
-            }
-        } else {
-            List<User> users = new ArrayList<User>();
-            for (Player p : server.getOnlinePlayers()) {
-                final User u = ess.getUser(p);
-                if (u.isHidden() && !showhidden) {
-                    continue;
-                }
-                users.add(u);
-            }
-            Collections.sort(users);
+        List<Player> onlinePlayers = getOnlinePlayers(allPlayers);
+        int onlinePlayerCount = onlinePlayers.size();
 
-            StringBuilder onlineUsers = new StringBuilder();
-            onlineUsers.append(Util.i18n("connectedPlayers"));
-            boolean first = true;
-            for (User user : users) {
-                if (!first) {
-                    onlineUsers.append(", ");
-                } else {
-                    first = false;
-                }
-                if (user.isAfk()) {
-                    onlineUsers.append("§7[AFK]§f");
-                }
-                if (user.isHidden()) {
-                    onlineUsers.append("§7[HIDDEN]§f");
-                }
-                onlineUsers.append(user.getDisplayName());
-                onlineUsers.append("§f");
-            }
-            sender.sendMessage(onlineUsers.toString());
+        List<Player> hiddenPlayers = getHiddenPlayers(allPlayers);
+        int hiddenPlayerCount = hiddenPlayers.size();
+
+        boolean showHiddenPlayers = canListHiddenPlayers(sender);
+        if(showHiddenPlayers)
+            onlinePlayerCount += hiddenPlayerCount;
+
+        String chatHeader = getCommandChatHeader(onlinePlayerCount, hiddenPlayerCount, showHiddenPlayers);
+        sender.sendMessage(chatHeader);
+
+        addOnlinePlayers(sender, onlinePlayers);
+        if(showHiddenPlayers)
+            addHiddenPlayers(sender, hiddenPlayers);
+    }
+    
+    private String getCommandChatHeader(
+        int playerCount,
+        int hiddenPlayerCount,
+        boolean showHiddenPlayers
+    ) {
+        String output = "";
+
+        if (playerCount == 1)
+            output = Util.format("playersOnlineSingle");
+        else
+            output = Util.format("playersOnlineMultiple", playerCount);
+
+        if (showHiddenPlayers && hiddenPlayerCount > 0)
+            output += " " + Util.format("playersOnlineHiddenTag", hiddenPlayerCount);
+
+        output += ":\n";
+        return output;
+    }
+
+    private boolean canListHiddenPlayers(CommandSender sender) {
+        // console check
+        if (!(sender instanceof Player))
+            return true;
+
+        User commandUser = ess.getUser(sender);
+        if (commandUser.isAuthorized(showHiddenPlayers_PermissionNode))
+            return true;
+
+        return false;
+    }
+
+    private boolean isHiddenPlayer(Player player) {
+        return ess.getUser(player).isHidden();
+    }
+
+    private List<Player> getOnlinePlayers(Player[] allPlayers) {
+        List<Player> output = new ArrayList<>();
+        
+        for (Player player : allPlayers) {
+            if(isHiddenPlayer(player))
+                continue;
+
+            output.add(player);
+        }
+    
+        return output;
+    }
+
+    private List<Player> getHiddenPlayers(Player[] allPlayers) {
+        List<Player> output = new ArrayList<>();
+        
+        for (Player player : allPlayers) {
+            if(isHiddenPlayer(player))
+                output.add(player);
+        }
+
+        return output;
+    }
+
+    private String getPlayerString(User user, boolean hidden) {
+        String output = "";
+
+        if(hidden)
+            output = "§7[§dHIDDEN§7]";
+        if(user.isAfk())
+            output += "§7[§8AFK§7]";
+        
+        output += user.getDisplayName();
+        return output;
+    }
+
+    private void addOnlinePlayers(CommandSender sender, List<Player> players) {
+        addPlayers(sender, players, false);
+    }
+    private void addHiddenPlayers(CommandSender sender, List<Player> players) {
+        addPlayers(sender, players, true);
+    }
+
+    private void addPlayers(CommandSender sender, List<Player> players, boolean hidden) {
+        if(players.size() == 0)
+            return;
+        
+        List<User> onlineUsers = new ArrayList<>();
+        for (Player player : players) {
+            User user = ess.getUser(player);
+            onlineUsers.add(user);
+        }
+
+        for (User user : onlineUsers) {
+            String playerName = getPlayerString(user, hidden);
+            playerName += "\n";
+
+            sender.sendMessage(playerName);
         }
     }
 }
