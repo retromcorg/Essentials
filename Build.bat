@@ -1,2 +1,2 @@
-cmd /c "mvn clean package -q"
+cmd /c "mvn clean package"
 python collect_and_rename.py
