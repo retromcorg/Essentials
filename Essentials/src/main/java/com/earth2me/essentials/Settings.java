@@ -262,11 +262,6 @@ public class Settings implements ISettings {
     }
 
     @Override
-    public boolean getSortListByGroups() {
-        return config.getBoolean("sort-list-by-groups", true);
-    }
-
-    @Override
     public void reloadConfig() {
         config.load();
     }

@@ -75,8 +75,6 @@ public interface ISettings extends IConf {
 
     int getMultipleHomes();
 
-    boolean getSortListByGroups();
-
     int getSpawnMobLimit();
 
     int getStartingBalance();
