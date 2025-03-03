@@ -180,7 +180,7 @@ public class Commandlist extends EssentialsCommand {
 
         /**
          * this looks complicated, but it just generates a segment of the player list starting at the 'startIndex'.
-         * it tries to get PLAYERS_PER_PAGE names, but till prevent IOOBE if there arent enough players present
+         * it tries to get PLAYERS_PER_PAGE names, but will prevent IOOBE if there arent enough players present
          */
         int namesAbleToPrint = Integer.min(playerCount - startIndex, PLAYERS_PER_PAGE);
         players = players.subList(
