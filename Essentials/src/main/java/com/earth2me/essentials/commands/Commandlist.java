@@ -108,11 +108,14 @@ public class Commandlist extends EssentialsCommand {
         if (hiddenPlayerCount > 0)
             output += " " + Util.format("playersOnlineHiddenTag", hiddenPlayerCount);
 
-        output += ":\n";
+        output += ":";
         return output;
     }
 
     private String getChatFooter(int page, int totalPages) {
+        if(totalPages == 1)
+            return  Util.i18n("pageNumberDisplaySingle");
+
         return Util.format("pageNumberDisplay", page, totalPages);
     }
 
@@ -195,8 +198,8 @@ public class Commandlist extends EssentialsCommand {
         }
 
         for (User user : onlineUsers) {
-            String playerName = getPlayerString(user);
-            playerName += "\n";
+            String playerName = Util.i18n("playersOnlineListBullet") + " ";
+            playerName += getPlayerString(user);
 
             sender.sendMessage(playerName);
         }
