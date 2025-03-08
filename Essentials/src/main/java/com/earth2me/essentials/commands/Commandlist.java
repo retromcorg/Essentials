@@ -76,7 +76,7 @@ public class Commandlist extends EssentialsCommand {
     }
 
     private int[] getPageDetails(int playerCount, String[] args) throws NumberFormatException {
-        int pagesAllowed = playerCount / PLAYERS_PER_PAGE + 1;
+        int pagesAllowed = (playerCount + PLAYERS_PER_PAGE - 1)  / PLAYERS_PER_PAGE;
         int[] output = new int[] {1, pagesAllowed};
 
         if (args.length == 0)
