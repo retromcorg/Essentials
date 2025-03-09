@@ -198,9 +198,12 @@ public class Commandlist extends EssentialsCommand {
         }
 
         for (User user : onlineUsers) {
-            String playerName = Util.format("playersOnlineListElement", getPlayerString(user), user.getName());
+            String displayName = getPlayerString(user);
 
-            sender.sendMessage(playerName);
+            if(displayName.contains("~"))
+                sender.sendMessage(Util.format("playersOnlineListElementNicknamed", displayName, user.getName()));
+            else
+                sender.sendMessage(Util.format("playersOnlineListElement", displayName));
         }
 
         return namesAbleToPrint;
