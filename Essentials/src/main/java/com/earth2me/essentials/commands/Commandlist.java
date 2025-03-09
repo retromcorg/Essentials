@@ -198,8 +198,7 @@ public class Commandlist extends EssentialsCommand {
         }
 
         for (User user : onlineUsers) {
-            String playerName = Util.i18n("playersOnlineListBullet") + " ";
-            playerName += getPlayerString(user);
+            String playerName = Util.format("playersOnlineListElement", getPlayerString(user), user.getName());
 
             sender.sendMessage(playerName);
         }
