@@ -386,7 +386,10 @@ public class EssentialsPlayerListener extends PlayerListener {
         }
         final User user = ess.getUser(event.getPlayer());
         final String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
-        final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
+        final List<String> commands = Arrays.asList(
+                "msg", "r", "mail", "m", "t", "emsg", "tell", "etell",
+                "whisper", "ewhisper", "w", "er", "reply", "ereply", "email"
+        );
         if (commands.contains(cmd)) {
             for (Player player : ess.getServer().getOnlinePlayers()) {
                 if (ess.getUser(player).isSocialSpyEnabled()) {
