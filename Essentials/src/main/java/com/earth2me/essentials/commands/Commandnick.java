@@ -102,7 +102,7 @@ public class Commandnick extends EssentialsCommand {
     private void setSendersNickname(User sender, String[] args) {
         String nickname = args[0];
 
-        setNickname(sender, sender, nickname);
+        setNickname(sender, sender, nickname, false);
     }
 
     private void setTargetPlayersNickname(User sender, String[] args) {
@@ -128,7 +128,7 @@ public class Commandnick extends EssentialsCommand {
 
         String nickname = args[1];
 
-        setNickname(sender, targetUser, nickname);
+        setNickname(sender, targetUser, nickname, true);
     }
 
     private boolean shouldRemoveNickname(User targetUser, String nickname) {
@@ -161,11 +161,15 @@ public class Commandnick extends EssentialsCommand {
         return input;
     }
 
-    private void setNickname(User sender, User targetUser, String nickname) {
+    private void setNickname(User sender, User targetUser, String nickname, boolean settingOtherPlayersNickname) {
         if (shouldRemoveNickname(targetUser, nickname)) {
             clearServerNickname(targetUser);
 
-            sender.sendMessage(Util.i18n("nickCleared"));
+            if(!settingOtherPlayersNickname)
+                sender.sendMessage(Util.i18n("nickCleared"));
+            else
+                sender.sendMessage(Util.format("nickClearedOthers", targetUser.getName()));
+
             return;
         }
 
@@ -184,8 +188,10 @@ public class Commandnick extends EssentialsCommand {
 
         setServerNickname(targetUser, nickname);
 
-        String nickSetMessage = Util.format("nickSet", targetUser.getDisplayName());
-        sender.sendMessage(nickSetMessage);
+        if(!settingOtherPlayersNickname)
+            sender.sendMessage(Util.format("nickSet", targetUser.getDisplayName()));
+        else
+            sender.sendMessage(Util.format("nickSetOthers", targetUser.getName(), targetUser.getDisplayName()));
     }
 
     private void clearServerNickname(User targetUser) {
