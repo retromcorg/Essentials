@@ -1,93 +1,196 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 public class Commandnick extends EssentialsCommand {
+    private final String PERMISSION_NODE = "essentials.nick.others";
+
+    private Server server;
+
     public Commandnick() {
         super("nick");
     }
 
-    @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        if (args.length < 1) {
-            throw new NotEnoughArgumentsException();
-        }
-
-        if (!ess.getSettings().changeDisplayName()) {
-            throw new Exception(Util.i18n("nickDisplayName"));
-        }
-
-        if (args.length > 1) {
-            if (!user.isAuthorized("essentials.nick.others")) {
-                throw new Exception(Util.i18n("nickOthersPermission"));
-            }
-
-            setOthersNickname(server, user, args);
-            return;
-        }
-
-
-        String nick = args[0];
-        if ("off".equalsIgnoreCase(nick) || user.getName().equalsIgnoreCase(nick)) {
-            user.setDisplayName(user.getName());
-            user.setNickname(null);
-            user.sendMessage(Util.i18n("nickNoMore"));
-            return;
-        }
-
-        if (nick.matches("[^a-zA-Z_0-9]")) {
-            throw new Exception(Util.i18n("nickNamesAlpha"));
-        }
+    private boolean canSetOtherPlayerNicknames(User sender) {
+        return (
+            sender.isAuthorized(PERMISSION_NODE) ||
+            sender.isOp()
+        );
+    }
+    
+    private boolean isDisplayNamesEnabled() {
+        return ess.getSettings().changeDisplayName();
+    }
+    
+    private boolean isNicknameUsed(User sender, String newNickname) {
+        newNickname = newNickname.toLowerCase();
 
         for (Player p : server.getOnlinePlayers()) {
-            if (user == p) {
-                continue;
-            }
-            String dn = p.getDisplayName().toLowerCase();
-            String n = p.getName().toLowerCase();
-            String nk = nick.toLowerCase();
-            if (nk.equals(dn) || nk.equals(n)) {
-                throw new Exception(Util.i18n("nickInUse"));
-            }
+            if (sender == p)
+            continue;
+
+            String playerDisplayName = p.getDisplayName().toLowerCase();
+            String playerName = p.getName().toLowerCase();
+
+            if (newNickname.equals(playerDisplayName) || newNickname.equals(playerName))
+                return true;
         }
 
-        user.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
-        user.setNickname(nick);
-        user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));
+        return false;
     }
 
     @Override
-    public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
-        if (args.length < 2) {
-            throw new NotEnoughArgumentsException();
-        }
-
-        if (!ess.getSettings().changeDisplayName()) {
-            sender.sendMessage(Util.i18n("nickDisplayName"));
+    public void run(
+        Server server,
+        User sender,
+        String commandLabel,
+        String[] args
+    ) {
+        if(!isDisplayNamesEnabled()) {
+            sender.sendMessage(Util.i18n("nickNotEnabled"));
             return;
         }
 
-        setOthersNickname(server, sender, args);
+        autoUpdateNickname(sender);
 
+        this.server = server;
+
+        switch (args.length) {
+            case 1: {
+                setSendersNickname(sender, args);
+
+                return;
+            }
+            case 2: {
+                if (canSetOtherPlayerNicknames(sender)) {
+                    setTargetPlayersNickname(sender, args);
+
+                    return;
+                }
+            }
+        }
+
+        printUsage(sender);
     }
 
-    private void setOthersNickname(Server server, CommandSender sender, String[] args) throws Exception {
-        User target = getPlayer(server, args, 0);
-        String nick = args[1];
-        if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick)) {
-            target.setDisplayName(target.getName());
-            target.setNickname(null);
-            target.sendMessage(Util.i18n("nickNoMore"));
-        } else {
-            target.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
-            target.setNickname(nick);
-            target.sendMessage(Util.format("nickSet", target.getDisplayName() + "§7."));
+    private void printUsage(User sender) {
+        sender.sendMessage(Util.i18n("nickUsage"));
+        if(canSetOtherPlayerNicknames(sender))
+            sender.sendMessage(Util.i18n("nickUsageStaffExtra"));
+    }
+
+    private void autoUpdateNickname(User sender) {
+        String senderNickname = sender.getNickname();
+        if(senderNickname == null)
+            return;
+
+        if(!allowedNickname(senderNickname)) {
+            clearServerNickname(sender);
+
+            sender.sendMessage(Util.i18n("nickUpgraded"));
+            sender.sendMessage(Util.i18n("nickRequirements"));
         }
-        sender.sendMessage(Util.i18n("nickChanged"));
+    }
+
+    private void setSendersNickname(User sender, String[] args) {
+        String nickname = args[0];
+
+        setNickname(sender, sender, nickname);
+    }
+
+    private void setTargetPlayersNickname(User sender, String[] args) {
+        User targetUser = null;
+
+        try {
+            targetUser = getPlayer(server, args, 0);
+        }
+        catch(NoSuchFieldException e) { } // this is handled below in the null check. only here to prevent RuntimeException
+        catch(Exception e) {
+            /* 
+            the check for NotEnoughArgumentsException happens before this entire function is called
+            this should never happen, but required anyways
+            */
+            throw new RuntimeException(e);
+        }
+
+        if (targetUser == null) {
+            sender.sendMessage(Util.i18n("playerNotFound"));
+
+            return;
+        }
+
+        String nickname = args[1];
+
+        setNickname(sender, targetUser, nickname);
+    }
+
+    private boolean shouldRemoveNickname(User targetUser, String nickname) {
+        return (
+            nickname.equalsIgnoreCase("clear") ||
+            targetUser.getName().equalsIgnoreCase(nickname)
+        );
+    }
+
+    private boolean allowedNickname(String nickname) {
+        nickname = decolorize(nickname);
+
+        return (
+            /* 
+            check if the name doesnt contain characters that arent in the set a-zA-Z0-9_
+            round-about way of saying, does this name only have characters in the set a-zA-Z0-9_
+            */
+            !nickname.matches("[^a-zA-Z0-9_]") && 
+
+            nickname.length() <= 16
+        );
+    }
+
+    private String decolorize(String input) {
+        // there is a method for this already in ChatColor, but it only removes § and not &
+        input = input.replaceAll("(?i)§[0-F]", "");
+        input = input.replaceAll("(?i)&[0-F]", "");
+
+        return input;
+    }
+
+    private void setNickname(User sender, User targetUser, String nickname) {
+        if (shouldRemoveNickname(targetUser, nickname)) {
+            clearServerNickname(targetUser);
+
+            sender.sendMessage(Util.i18n("nickCleared"));
+            return;
+        }
+
+        if (!allowedNickname(nickname)) {
+            sender.sendMessage(Util.i18n("nickRequirements"));
+
+            return;
+        }
+
+        if (isNicknameUsed(targetUser, nickname)) {
+            sender.sendMessage(Util.i18n("nickInUse"));
+
+            return;
+        }
+
+
+        setServerNickname(targetUser, nickname);
+
+        String nickSetMessage = Util.format("nickSet", targetUser.getDisplayName());
+        sender.sendMessage(nickSetMessage);
+    }
+
+    private void clearServerNickname(User targetUser) {
+        targetUser.setDisplayName(targetUser.getName());
+        targetUser.setNickname(null);
+    }
+
+    private void setServerNickname(User targetUser, String nickname) {
+        targetUser.setDisplayName(ess.getSettings().getNicknamePrefix() + nickname);
+        targetUser.setNickname(nickname);
     }
 }
