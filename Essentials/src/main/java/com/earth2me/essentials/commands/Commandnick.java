@@ -137,14 +137,15 @@ public class Commandnick extends EssentialsCommand {
 
     private boolean allowedNickname(String nickname) {
         nickname = decolorize(nickname);
-
+    
         return (
-            /* 
-            check if the name doesnt contain characters that arent in the set a-zA-Z0-9_
-            round-about way of saying, does this name only have characters in the set a-zA-Z0-9_
-            */
-            !nickname.matches("[^a-zA-Z0-9_]") && 
-
+            nickname.matches(
+                "^(?!" +
+                    ".*\\[.*\\[|" +     // no more than 1 '['
+                    ".*\\].*\\]" +      // no more than 1 ']'
+                ")" +
+                "[a-zA-Z0-9_\\[\\]]*$"  // allowed chars
+            ) && 
             nickname.length() <= 16
         );
     }
