@@ -15,34 +15,6 @@ public class Commandnick extends EssentialsCommand {
         super("nick");
     }
 
-    private boolean canSetOtherPlayerNicknames(User sender) {
-        return (
-            sender.isAuthorized(PERMISSION_NODE) ||
-            sender.isOp()
-        );
-    }
-    
-    private boolean isDisplayNamesEnabled() {
-        return ess.getSettings().changeDisplayName();
-    }
-    
-    private boolean isNicknameUsed(User sender, String newNickname) {
-        newNickname = newNickname.toLowerCase();
-
-        for (Player p : server.getOnlinePlayers()) {
-            if (sender == p)
-            continue;
-
-            String playerDisplayName = p.getDisplayName().toLowerCase();
-            String playerName = p.getName().toLowerCase();
-
-            if (newNickname.equals(playerDisplayName) || newNickname.equals(playerName))
-                return true;
-        }
-
-        return false;
-    }
-
     @Override
     public void run(
         Server server,
@@ -75,6 +47,34 @@ public class Commandnick extends EssentialsCommand {
         }
 
         printUsage(sender);
+    }
+
+    private boolean canSetOtherPlayerNicknames(User sender) {
+        return (
+            sender.isAuthorized(PERMISSION_NODE) ||
+            sender.isOp()
+        );
+    }
+    
+    private boolean isDisplayNamesEnabled() {
+        return ess.getSettings().changeDisplayName();
+    }
+    
+    private boolean isNicknameUsed(User sender, String newNickname) {
+        newNickname = newNickname.toLowerCase();
+
+        for (Player p : server.getOnlinePlayers()) {
+            if (sender == p)
+                continue;
+
+            String playerDisplayName = p.getDisplayName().toLowerCase();
+            String playerName = p.getName().toLowerCase();
+
+            if (newNickname.equals(playerDisplayName) || newNickname.equals(playerName))
+                return true;
+        }
+
+        return false;
     }
 
     private void printUsage(User sender) {
