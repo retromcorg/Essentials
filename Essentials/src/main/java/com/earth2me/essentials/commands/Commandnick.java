@@ -27,7 +27,8 @@ public class Commandnick extends EssentialsCommand {
             return;
         }
 
-        autoUpdateNickname(sender);
+        if(autoUpdateNickname(sender))
+            return;
 
         this.server = server;
 
@@ -83,17 +84,19 @@ public class Commandnick extends EssentialsCommand {
             sender.sendMessage(Util.i18n("nickUsageStaffExtra"));
     }
 
-    private void autoUpdateNickname(User sender) {
+    private boolean autoUpdateNickname(User sender) {
         String senderNickname = sender.getNickname();
         if(senderNickname == null)
-            return;
+            return false;
 
         if(!allowedNickname(senderNickname)) {
             clearServerNickname(sender);
 
             sender.sendMessage(Util.i18n("nickUpgraded"));
-            sender.sendMessage(Util.i18n("nickRequirements"));
+            return true;
         }
+
+        return false;
     }
 
     private void setSendersNickname(User sender, String[] args) {
