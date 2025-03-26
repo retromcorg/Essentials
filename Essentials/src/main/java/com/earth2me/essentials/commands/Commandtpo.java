@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -18,11 +17,7 @@ public class Commandtpo extends EssentialsCommand {
         }
 
         //Just basically the old tp command
-        User p = getPlayer(server, args, 0, true);
-        // Check if user is offline
-        if (p.getBase() instanceof OfflinePlayer) {
-            throw new NoSuchFieldException(Util.i18n("playerNotFound"));
-        }
+        User p = getPlayer(server, args, 0);
 
         // Verify permission
         if (!p.isHidden() || user.isAuthorized("essentials.teleport.hidden")) {
