@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.earth2me.essentialss</groupId>
     <artifactId>essentials-parent</artifactId>
-    <version>2.6.8-RETROMC-SNAPSHOT</version>
+    <version>2.6.9-RETROMC-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
