@@ -65,7 +65,7 @@ public class Commandignore extends EssentialsCommand {
                     PermissionsUser jpUser = permsAPI.getUser(uuid);
                     if (jpUser != null) {
                         String groupName = jpUser.getGroup().getName().toLowerCase().trim();
-                        if (groupName.equals("trial helper") ||
+                        if (groupName.equals("trial") ||
                                 groupName.equals("helper") ||
                                 groupName.equals("moderator") ||
                                 groupName.equals("admin")) {
