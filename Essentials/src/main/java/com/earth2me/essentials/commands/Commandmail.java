@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-
 public class Commandmail extends EssentialsCommand {
     private final String CAN_SEND_MAIL_PERMISSION_NODE = "essentials.mail.send";
 
@@ -91,7 +90,33 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(Util.i18n(receiveMailOnDiscord ? "mailDiscordEnabled" : "mailDiscordDisabled"));
             return;
         }
-        throw new NotEnoughArgumentsException();
+
+        String mailSentMessage = Util.i18n("mailSent");
+        user.sendMessage(mailSentMessage);
+
+        if (hasIgnoredPlayer(toUser, user))
+            return true;
+        
+        String mailMessage = ChatColor.stripColor(user.getDisplayName()) + ": " + message;
+        toUser.addMail(mailMessage);
+
+        return true;
+    }
+
+    private User findUser(String playerName) {
+        Player player = server.getPlayer(playerName);
+        if (player == null)
+            return ess.getOfflineUser(playerName);
+
+        return ess.getUser(player);
+    }
+
+    private boolean hasIgnoredPlayer(User recipient, User sender) {
+        return recipient.isIgnoredPlayer(sender.getName());
+    }
+
+    private boolean canSendMail(User user) {
+        return user.isAuthorized(CAN_SEND_MAIL_PERMISSION_NODE);
     }
 
     private void forwardMailToDiscord(User sender, User recipient, String[] args) {
