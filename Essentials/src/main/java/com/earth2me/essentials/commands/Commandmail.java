@@ -80,7 +80,6 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(Util.i18n("mailCleared"));
             return;
         }
-
         if(args.length == 1 && "discord".equalsIgnoreCase(args[0])) {
             if (!user.isAuthorized("essentials.mail.discord")) {
                 throw new Exception(Util.i18n("noMailDiscordPerm"));
@@ -90,33 +89,7 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(Util.i18n(receiveMailOnDiscord ? "mailDiscordEnabled" : "mailDiscordDisabled"));
             return;
         }
-
-        String mailSentMessage = Util.i18n("mailSent");
-        user.sendMessage(mailSentMessage);
-
-        if (hasIgnoredPlayer(toUser, user))
-            return true;
-        
-        String mailMessage = ChatColor.stripColor(user.getDisplayName()) + ": " + message;
-        toUser.addMail(mailMessage);
-
-        return true;
-    }
-
-    private User findUser(String playerName) {
-        Player player = server.getPlayer(playerName);
-        if (player == null)
-            return ess.getOfflineUser(playerName);
-
-        return ess.getUser(player);
-    }
-
-    private boolean hasIgnoredPlayer(User recipient, User sender) {
-        return recipient.isIgnoredPlayer(sender.getName());
-    }
-
-    private boolean canSendMail(User user) {
-        return user.isAuthorized(CAN_SEND_MAIL_PERMISSION_NODE);
+        throw new NotEnoughArgumentsException();
     }
 
     private void forwardMailToDiscord(User sender, User recipient, String[] args) {
