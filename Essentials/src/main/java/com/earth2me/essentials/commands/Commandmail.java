@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDA;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -17,24 +18,33 @@ import java.util.UUID;
 
 
 public class Commandmail extends EssentialsCommand {
+    private final String CAN_SEND_MAIL_PERMISSION_NODE = "essentials.mail.send";
+
+    private Server server;
+
     public Commandmail() {
         super("mail");
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+        this.server = server;
+        User user = ess.getUser(sender);
+
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
             List<String> mail = user.getMails();
             if (mail.isEmpty()) {
-                throw new Exception(Util.i18n("noMail"));
+                user.sendMessage(Util.i18n("noMail"));
+                return;
             }
             for (String s : mail) {
                 user.sendMessage(s);
             }
-            throw new Exception(Util.i18n("mailClear"));
+            user.sendMessage(Util.i18n("mailClear"));
+            return;
         }
         if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
-            if (!user.isAuthorized("essentials.mail.send")) {
+            if (!user.isAuthorized(CAN_SEND_MAIL_PERMISSION_NODE)) {
                 throw new Exception(Util.i18n("noMailSendPerm"));
             }
 
@@ -52,7 +62,6 @@ public class Commandmail extends EssentialsCommand {
             if (!u.isIgnoredPlayer(user.getName())) {
                 u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
 
-                // Send to user on Discord if they are linked
                 boolean forwardToDiscord = ESSAdvConfig.getInstance().getConfigBoolean("settings.mail.send-to-discord.enabled");
                 if (forwardToDiscord && Bukkit.getPluginManager().isPluginEnabled("DiscordAuthentication") && Bukkit.getPluginManager().isPluginEnabled("DiscordCore")) {
                     try {
@@ -69,7 +78,8 @@ public class Commandmail extends EssentialsCommand {
         }
         if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
             user.setMails(null);
-            throw new Exception(Util.i18n("mailCleared"));
+            user.sendMessage(Util.i18n("mailCleared"));
+            return;
         }
 
         if(args.length == 1 && "discord".equalsIgnoreCase(args[0])) {
@@ -81,7 +91,6 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(Util.i18n(receiveMailOnDiscord ? "mailDiscordEnabled" : "mailDiscordDisabled"));
             return;
         }
-
         throw new NotEnoughArgumentsException();
     }
 
@@ -90,7 +99,6 @@ public class Commandmail extends EssentialsCommand {
             System.out.println("Skipping mail forwarding to Discord for " + recipient.getName() + ": Recipient is online.");
             return;
         }
-        // Check recipient has received mail before forwarding
         if (!recipient.getReceiveMailOnDiscord()) {
             System.out.println("Skipping mail forwarding to Discord for " + recipient.getName() + ": Recipient has disabled mail forwarding.");
             return;
