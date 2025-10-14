@@ -1,13 +1,18 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.*;
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.logging.Logger;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public abstract class EssentialsCommand implements IEssentialsCommand {
@@ -46,13 +51,19 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (args.length <= pos) {
             throw new NotEnoughArgumentsException();
         }
+
         final User user = ess.getUser(args[pos]);
-        if (user != null) {
-            if (!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden())) {
-                throw new NoSuchFieldException(Util.i18n("playerNotFound"));
-            }
-            return user;
-        }
+        if (
+            user != null && (   // if the user exists, and either
+                getOffline ||   // 1) we allow offline players
+                !(              // 2) the player is not offline/hidden 
+                    user.getBase() instanceof OfflinePlayer ||
+                    user.isHidden()
+                )
+            )
+        ) return user;
+
+        // try to find a user that matches the partial string
         final List<Player> matches = server.matchPlayer(args[pos]);
 
         if (!matches.isEmpty()) {
