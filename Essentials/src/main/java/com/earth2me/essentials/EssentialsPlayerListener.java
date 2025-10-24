@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.bukkit.Bukkit.getPlayer;
+
 
 public class EssentialsPlayerListener extends PlayerListener {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
@@ -56,6 +58,23 @@ public class EssentialsPlayerListener extends PlayerListener {
         user.updateActivity(true);
         if (ess.getSettings().changeDisplayName()) {
             user.setDisplayName(user.getNick());
+        }
+
+        // If the user has ignore exempt permission, unignore them for all players
+        if (user.hasPermission("essentials.ignore.exempt") || user.isOp()) {
+            for (Player p : ess.getServer().getOnlinePlayers()) {
+                // Skip self
+                if(p.getName().equalsIgnoreCase(user.getName())) {
+                    continue;
+                }
+
+                User u = ess.getUser(p);
+
+                // If the viewer is ignoring the poster, unignore them
+                if (u.isIgnoredPlayer(user.getName())) {
+                    u.setIgnoredPlayer(user.getName(), false);
+                }
+            }
         }
     }
 
