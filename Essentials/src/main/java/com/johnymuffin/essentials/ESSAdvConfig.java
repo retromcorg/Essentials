@@ -38,7 +38,7 @@ public class ESSAdvConfig extends Configuration {
         generateConfigOption("discord.channel-id", "0");
 
 
-        generateConfigOption("settings.mail.send-to-discord.enabled", false);
+        generateConfigOption("settings.mail.send-to-discord.enabled", true);
         generateConfigOption("settings.mail.send-to-discord.info", "This will send mail that a player receives to them via Discord if they have linked their account with Discord Authentication Core.");
 
     }
