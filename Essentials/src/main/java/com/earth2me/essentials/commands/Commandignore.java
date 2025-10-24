@@ -56,25 +56,10 @@ public class Commandignore extends EssentialsCommand {
         }
         String name = u.getName();
 
-        if (server.getPluginManager().getPlugin("JPerms") != null) {
-            JohnyPerms permsPlugin = (JohnyPerms) server.getPluginManager().getPlugin("JPerms");
-            if (permsPlugin != null) {
-                JohnyPermsAPI permsAPI = new JohnyPermsAPI(permsPlugin);
-                UUID uuid = getUUIDFromCache(name);
-                if (uuid != null) {
-                    PermissionsUser jpUser = permsAPI.getUser(uuid);
-                    if (jpUser != null) {
-                        String groupName = jpUser.getGroup().getName().toLowerCase().trim();
-                        if (groupName.equals("trial") ||
-                                groupName.equals("helper") ||
-                                groupName.equals("moderator") ||
-                                groupName.equals("admin")) {
-                            user.sendMessage(ChatColor.RED + "You cannot ignore staff members!");
-                            return;
-                        }
-                    }
-                }
-            }
+        if(u.hasPermission("essentials.ignore.exempt") || u.isOp()) {
+            user.setIgnoredPlayer(name, false); // Ensure they are not ignored. This is useful if an op/exempt player was ignored before gaining exempt status.
+            user.sendMessage(Util.format("ignoreExempt", u.getName()));
+            return;
         }
 
         if (user.isIgnoredPlayer(name)) {
