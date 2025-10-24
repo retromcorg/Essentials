@@ -621,7 +621,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    public void setUUUID(UUID uuid) {
+    public void setUUID(UUID uuid) {
         this.uuid = uuid;
         config.setProperty("uuid", uuid.toString());
         config.save();

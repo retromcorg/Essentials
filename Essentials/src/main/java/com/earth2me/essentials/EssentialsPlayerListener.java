@@ -208,7 +208,7 @@ public class EssentialsPlayerListener extends PlayerListener {
         ess.getBackup().onPlayerJoin();
         final User user = ess.getUser(event.getPlayer());
 
-        user.setUUUID(event.getPlayer().getUniqueId()); // Set the UUID of the player
+        user.setUUID(event.getPlayer().getUniqueId()); // Set the UUID of the player
 
         //we do not know the ip address on playerlogin so we need to do this here.
         if (user.isIpBanned()) {

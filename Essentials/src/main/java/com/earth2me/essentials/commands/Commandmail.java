@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Commandmail extends EssentialsCommand {
     private final String CAN_SEND_MAIL_PERMISSION_NODE = "essentials.mail.send";
@@ -62,13 +63,11 @@ public class Commandmail extends EssentialsCommand {
                 u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
 
                 boolean forwardToDiscord = ESSAdvConfig.getInstance().getConfigBoolean("settings.mail.send-to-discord.enabled");
-                if (forwardToDiscord && Bukkit.getPluginManager().isPluginEnabled("DiscordAuthentication") && Bukkit.getPluginManager().isPluginEnabled("DiscordCore")) {
-                    try {
-                        forwardMailToDiscord(user, u, args);
-                    } catch (Exception e) {
-                        System.out.println("Failed to forward mail to Discord for " + u.getName() + ".");
-                        e.printStackTrace();
-                    }
+                try {
+                    forwardMailToDiscord(user, u, args);
+                } catch (Exception e) {
+                    System.out.println("Failed to forward mail to Discord for " + u.getName() + ".");
+                    e.printStackTrace();
                 }
 
             }
@@ -93,16 +92,23 @@ public class Commandmail extends EssentialsCommand {
     }
 
     private void forwardMailToDiscord(User sender, User recipient, String[] args) {
-        if (recipient.isOnline()) {
-            System.out.println("Skipping mail forwarding to Discord for " + recipient.getName() + ": Recipient is online.");
-            return;
-        }
-        if (!recipient.getReceiveMailOnDiscord()) {
-            System.out.println("Skipping mail forwarding to Discord for " + recipient.getName() + ": Recipient has disabled mail forwarding.");
+
+        // Check if both DiscordAuthentication and DiscordCore plugins are enabled
+        if (!(Bukkit.getPluginManager().isPluginEnabled("DiscordAuthentication") && Bukkit.getPluginManager().isPluginEnabled("DiscordCore"))) {
             return;
         }
 
-        System.out.println("Forwarding mail to Discord for " + recipient.getName());
+        // Check if recipient is online or has disabled mail forwarding
+        if (recipient.isOnline()) {
+            return;
+        }
+
+        // Check if recipient has disabled mail forwarding
+        if (!recipient.getReceiveMailOnDiscord()) {
+            return;
+        }
+
+
         DiscordAuthentication plugin = (DiscordAuthentication) Bukkit.getPluginManager().getPlugin("DiscordAuthentication");
         String targetUsername = recipient.getName();
         UUID targetUUID = recipient.getUUID();
@@ -111,7 +117,7 @@ public class Commandmail extends EssentialsCommand {
             String discordID = plugin.getData().getDiscordIDFromUUID(String.valueOf(targetUUID));
 
             if (discordID != null) {
-                System.out.println("Sending mail to " + targetUsername + " on Discord with ID: " + discordID);
+                log(Level.INFO, "Mail sent from " + sender.getName() + " to " + targetUsername + " forwarding to Discord ID: " + discordID);
                 DiscordCore discordCore = (DiscordCore) Bukkit.getPluginManager().getPlugin("DiscordCore");
                 JDA jda = discordCore.getDiscordBot().getJda();
 
@@ -119,9 +125,9 @@ public class Commandmail extends EssentialsCommand {
                     if (discordUser != null) {
                         discordUser.openPrivateChannel().queue(privateChannel -> {
                             EmbedBuilder embedBuilder = new EmbedBuilder();
-                            embedBuilder.setAuthor(sender.getDisplayName(), null, "https://skins.legacyminecraft.com/avatars/" + sender.getBase().getUniqueId());
+                            embedBuilder.setAuthor(ChatColor.stripColor(sender.getDisplayName()), null, "https://skins.legacyminecraft.com/avatars/" + sender.getBase().getUniqueId());
                             embedBuilder.setTitle("Forwarded Mail from Minecraft Server");
-                            embedBuilder.setDescription("You have received a new mail message on the Minecraft server from " + sender.getDisplayName() + ".\n\n**Message:**\n" + getFinalArg(args, 2) + "\n\n*Note: You can use `/mail discord` in-game to toggle receiving mail via Discord.*");
+                            embedBuilder.setDescription("You have received a new mail message on the Minecraft server from " + sender.getName() + ".\n\n**Message:**\n" + getFinalArg(args, 2) + "\n\n*Note: You can use `/mail discord` in-game to toggle receiving mail via Discord.*");
                             embedBuilder.setFooter("Essentials (RetroMC fork) - Mail Command", "https://wiki.retromc.org/images/1/1a/Retromcnew.png");
                             embedBuilder.setColor(0x00FF00);
                             privateChannel.sendMessage(embedBuilder.build()).queue();
@@ -131,19 +137,23 @@ public class Commandmail extends EssentialsCommand {
                                 return null;
                             });
                         }, throwable -> {
-                            System.out.println("Failed to send a message to user with Discord ID: " + discordID + ". Reason: " + throwable.getMessage());
+                            log(Level.WARNING, "Failed to send a message to user with Discord ID: " + discordID + ". Reason: " + throwable.getMessage());
                         });
                     } else {
-                        System.out.println("User with Discord ID " + discordID + " could not be found in any mutual guild.");
+                        log(Level.WARNING, "User with Discord ID " + discordID + " could not be found in any mutual guild.");
                     }
                 }, throwable -> {
-                    System.out.println("Failed to retrieve user with Discord ID: " + discordID + ". Reason: " + throwable.getMessage());
+                    log(Level.WARNING, "Failed to retrieve user with Discord ID: " + discordID + ". Reason: " + throwable.getMessage());
                 });
             } else {
-                System.out.println("Failed to send mail to " + targetUsername + " on Discord: No Discord ID found.");
+                log(Level.INFO, "No Discord ID found for UUID: " + targetUUID + " when attempting to forward mail to Discord.");
             }
         } else {
-            System.out.println("Failed to send mail to " + targetUsername + " on Discord: No UUID found in Essentials data.");
+            log(Level.WARNING, "Failed to send mail to " + targetUsername + " on Discord: No UUID found in Essentials data.");
         }
+    }
+
+    private void log(Level level, String message) {
+        ess.getServer().getLogger().log(level, "[" + ess.getDescription().getName() + "] " + message);
     }
 }
