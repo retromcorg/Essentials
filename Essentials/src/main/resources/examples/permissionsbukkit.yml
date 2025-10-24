@@ -34,6 +34,7 @@ groups:
             essentials.kit.tools: true
             essentials.mail: true
             essentials.mail.send: true
+            essentials.mail.discord: true
             essentials.me: true
             essentials.msg: true
             essentials.nick: true
