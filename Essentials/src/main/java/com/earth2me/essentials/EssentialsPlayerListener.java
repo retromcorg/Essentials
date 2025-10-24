@@ -43,22 +43,6 @@ public class EssentialsPlayerListener extends PlayerListener {
     @Override
     public void onPlayerChat(final PlayerChatEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        if (user.isMuted()) {
-            event.setCancelled(true);
-            user.sendMessage(Util.i18n("playerMuted"));
-            LOGGER.info(Util.format("mutedUserSpeaks", user.getName()));
-        }
-        final Iterator<Player> it = event.getRecipients().iterator();
-        while (it.hasNext()) {
-            final User u = ess.getUser(it.next());
-            if (u.isIgnoredPlayer(user.getName())) {
-                it.remove();
-            }
-        }
-        user.updateActivity(true);
-        if (ess.getSettings().changeDisplayName()) {
-            user.setDisplayName(user.getNick());
-        }
 
         // If the user has ignore exempt permission, unignore them for all players
         if (user.hasPermission("essentials.ignore.exempt") || user.isOp()) {
@@ -75,6 +59,23 @@ public class EssentialsPlayerListener extends PlayerListener {
                     u.setIgnoredPlayer(user.getName(), false);
                 }
             }
+        }
+
+        if (user.isMuted()) {
+            event.setCancelled(true);
+            user.sendMessage(Util.i18n("playerMuted"));
+            LOGGER.info(Util.format("mutedUserSpeaks", user.getName()));
+        }
+        final Iterator<Player> it = event.getRecipients().iterator();
+        while (it.hasNext()) {
+            final User u = ess.getUser(it.next());
+            if (u.isIgnoredPlayer(user.getName())) {
+                it.remove();
+            }
+        }
+        user.updateActivity(true);
+        if (ess.getSettings().changeDisplayName()) {
+            user.setDisplayName(user.getNick());
         }
     }
 
