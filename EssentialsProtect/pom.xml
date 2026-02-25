@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
-            <version>0.9.5.5</version> <!-- Check for newer versions -->
+            <version>0.12.0</version> <!-- Check for newer versions -->
         </dependency>
 
         <dependency>
