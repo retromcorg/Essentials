@@ -65,4 +65,6 @@ public interface IEssentials extends Plugin {
     ItemDb getItemDb();
 
     UserMap getUserMap();
+
+    InvseeManager getInvseeManager();
 }

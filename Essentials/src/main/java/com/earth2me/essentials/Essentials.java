@@ -77,6 +77,7 @@ public class Essentials extends JavaPlugin implements IEssentials {
     private transient ItemDb itemDb;
     private transient EssentialsUpdateTimer updateTimer;
     private transient PermissionsHandler permissionsHandler;
+    private transient InvseeManager invseeManager;
     private transient UserMap userMap;
 
     @Override
@@ -209,6 +210,9 @@ public class Essentials extends JavaPlugin implements IEssentials {
         }
 
         pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
+
+        invseeManager = new InvseeManager(this);
+        getScheduler().scheduleSyncRepeatingTask(this, invseeManager, 10, 10);
 
         final EssentialsTimer timer = new EssentialsTimer(this);
         getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
@@ -600,5 +604,10 @@ public class Essentials extends JavaPlugin implements IEssentials {
     @Override
     public UserMap getUserMap() {
         return userMap;
+    }
+
+    @Override
+    public InvseeManager getInvseeManager() {
+        return invseeManager;
     }
 }
