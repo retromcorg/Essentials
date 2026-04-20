@@ -22,10 +22,8 @@ public class InvseeManager implements Runnable {
     // viewerName > targetName
     private final Map<String, String> sessions = new HashMap<String, String>();
 
-    // viewerName > offline target User (strong ref — prevents GC, keeps config object alive)
     private final Map<String, User> offlineTargets = new HashMap<String, User>();
-
-    // viewerName > inventory snapshot at last sync tick (bidirectional change detection)
+    private final Map<String, ItemStack[]> offlineOriginals = new HashMap<String, ItemStack[]>();
     private final Map<String, ItemStack[]> lastSyncState = new HashMap<String, ItemStack[]>();
 
     public InvseeManager(IEssentials ess) {
@@ -36,6 +34,7 @@ public class InvseeManager implements Runnable {
         sessions.put(viewer.getName(), target.getName());
         if (offline) {
             offlineTargets.put(viewer.getName(), target);
+            offlineOriginals.put(viewer.getName(), cloneContents(viewer.getInventory().getContents()));
         } else {
             lastSyncState.put(viewer.getName(), cloneContents(target.getInventory().getContents()));
         }
@@ -56,12 +55,14 @@ public class InvseeManager implements Runnable {
     public void endSession(User viewer) {
         String targetName  = sessions.remove(viewer.getName());
         User   offlineTarget = offlineTargets.remove(viewer.getName());
+        ItemStack[] original = offlineOriginals.remove(viewer.getName());
         lastSyncState.remove(viewer.getName());
 
         if (offlineTarget != null) {
-            // Offline session: write viewer's current inventory to a dedicated pending file.
-            // Using a fresh EssentialsConf completely bypasses UserData caching.
-            savePendingFile(offlineTarget.getName(), viewer.getInventory().getContents());
+            ItemStack[] current = viewer.getInventory().getContents();
+            if (contentsChanged(original, current)) {
+                savePendingFile(offlineTarget.getName(), current);
+            }
         } else if (targetName != null) {
             // Online session: final push to the live target
             User target = ess.getUser(targetName);
@@ -76,6 +77,7 @@ public class InvseeManager implements Runnable {
     public void forceEndSession(String viewerName) {
         sessions.remove(viewerName);
         offlineTargets.remove(viewerName);
+        offlineOriginals.remove(viewerName);
         lastSyncState.remove(viewerName);
     }
 
@@ -247,5 +249,16 @@ public class InvseeManager implements Runnable {
         if (a == null || b == null) return false;
         if (a.getType() == Material.AIR && b.getType() == Material.AIR) return true;
         return a.equals(b);
+    }
+
+    private static boolean contentsChanged(ItemStack[] original, ItemStack[] current) {
+        if (original == null) return false;
+        int len = Math.max(original.length, current == null ? 0 : current.length);
+        for (int i = 0; i < len; i++) {
+            ItemStack o = (original != null && i < original.length) ? original[i] : null;
+            ItemStack c = (current  != null && i < current.length)  ? current[i]  : null;
+            if (!stackEquals(o, c)) return true;
+        }
+        return false;
     }
 }
