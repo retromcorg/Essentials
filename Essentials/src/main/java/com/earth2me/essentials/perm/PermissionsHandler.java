@@ -85,6 +85,15 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
 
+        final Plugin retroBridgePlugin = pluginManager.getPlugin("RetroBridge");
+        if (retroBridgePlugin != null && retroBridgePlugin.isEnabled()) {
+            if (!(handler instanceof RetroBridgeHandler)) {
+                LOGGER.log(Level.INFO, "Essentials: Using RetroBridge based permissions.");
+                handler = new RetroBridgeHandler();
+            }
+            return;
+        }
+
         final Plugin permJohnyPermsPlugin = pluginManager.getPlugin("JPerms");
         if (permJohnyPermsPlugin != null && permJohnyPermsPlugin.isEnabled()) {
             if (!(handler instanceof JohnyPermsHandler)) {

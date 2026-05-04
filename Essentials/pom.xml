@@ -63,6 +63,13 @@
             <version>1.0.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.retromc</groupId>
+            <artifactId>RetroBridge</artifactId>
+            <version>0.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Contains various plugins dependencies for Essentials -->
         <dependency>
             <groupId>com.earth2me.essentials</groupId>

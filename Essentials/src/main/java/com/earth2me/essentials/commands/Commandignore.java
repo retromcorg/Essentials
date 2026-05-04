@@ -22,24 +22,6 @@ public class Commandignore extends EssentialsCommand {
         super("ignore");
     }
 
-    private UUID getUUIDFromCache(String playerName) {
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray arr = (JSONArray) parser.parse(new FileReader("uuidcache.json"));
-            for (Object obj : arr) {
-                JSONObject entry = (JSONObject) obj;
-                String name = (String) entry.get("name");
-                if (name != null && name.equalsIgnoreCase(playerName)) {
-                    String uuidStr = (String) entry.get("uuid");
-                    return UUID.fromString(uuidStr);
-                }
-            }
-        } catch (Exception e) {
-            // Sil
-        }
-        return null;
-    }
-
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (args.length < 1) {
