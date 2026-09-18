@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
+import java.util.function.Function;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public class UserMap implements Function<String, User>, IConf {
     private final transient IEssentials ess;
-    private final transient ConcurrentMap<String, User> users = new MapMaker().softValues().makeComputingMap(this);
+    private final transient ConcurrentMap<String, User> users = new ConcurrentHashMap<String, User>();
 
     public UserMap(final IEssentials ess) {
         this.ess = ess;
@@ -33,7 +33,7 @@ public class UserMap implements Function<String, User>, IConf {
                     }
                     final String name = string.substring(0, string.length() - 4);
                     try {
-                        users.get(name.toLowerCase());
+                        users.computeIfAbsent(name.toLowerCase(), UserMap.this);
                     } catch (NullPointerException ex) {
                         // Ignore these
                     }
@@ -47,7 +47,7 @@ public class UserMap implements Function<String, User>, IConf {
     }
 
     public User getUser(final String name) throws NullPointerException {
-        return users.get(name.toLowerCase());
+        return users.computeIfAbsent(name.toLowerCase(), UserMap.this);
     }
 
     @Override

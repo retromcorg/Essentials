@@ -45,9 +45,10 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.legacyminecraft.poseidon</groupId>
-            <artifactId>poseidon-craftbukkit</artifactId>
-            <version>1.1.8</version>
+            <groupId>com.legacyminecraft</groupId>
+            <artifactId>poseidon-server</artifactId>
+            <version>2.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Essentials Plugin -->

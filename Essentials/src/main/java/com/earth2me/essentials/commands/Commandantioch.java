@@ -7,7 +7,6 @@ import net.minecraft.server.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.TNTPrimed;
-import org.json.simple.JSONObject;
 
 
 public class Commandantioch extends EssentialsCommand {

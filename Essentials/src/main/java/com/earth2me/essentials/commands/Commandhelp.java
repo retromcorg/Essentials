@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
@@ -23,7 +24,7 @@ public class Commandhelp extends EssentialsCommand {
     private static final String DESCRIPTION = "description";
     private static final String PERMISSION = "permission";
     private static final String PERMISSIONS = "permissions";
-    public final Yaml yaml = new Yaml(new SafeConstructor());
+    public final Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
 
     public Commandhelp() {
         super("help");

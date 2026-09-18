@@ -1,10 +1,10 @@
 package com.earth2me.essentials;
 
+import com.legacyminecraft.poseidon.persistence.PersistentDataContainer;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +12,8 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class FakeWorld implements World {
@@ -268,19 +270,11 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public boolean createExplosion(double v, double v1, double v2, float v3, boolean b, EntityDamageEvent.DamageCause damageCause) {
-        return false;
-    }
 
     public boolean createExplosion(Location lctn, float f, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public boolean createExplosion(Location location, float v, boolean b, EntityDamageEvent.DamageCause damageCause) {
-        return false;
-    }
 
     public <T extends Entity> T spawn(Location lctn, Class<T> type) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -357,4 +351,18 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return null;
+    }
+
+    @Override
+    public void accessPersistentDataContainer(Consumer<PersistentDataContainer> consumer) {
+        World.super.accessPersistentDataContainer(consumer);
+    }
+
+    @Override
+    public <T> T accessPersistentDataContainerReturning(Function<PersistentDataContainer, T> function) {
+        return World.super.accessPersistentDataContainerReturning(function);
+    }
 }

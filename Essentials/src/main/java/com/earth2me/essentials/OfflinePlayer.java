@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
-import com.projectposeidon.ConnectionType;
+import com.legacyminecraft.poseidon.network.connection.PlayerConnection;
+import com.legacyminecraft.poseidon.persistence.PersistentDataContainer;
+import com.legacyminecraft.poseidon.profile.PlayerProfile;
 import net.minecraft.server.Packet;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -14,12 +16,15 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+import org.jspecify.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class OfflinePlayer implements Player {
@@ -54,6 +59,16 @@ public class OfflinePlayer implements Player {
     }
 
     public void setDisplayName(String string) {
+    }
+
+    @Override
+    public String getNameTag() {
+        return "";
+    }
+
+    @Override
+    public void setNameTag(String s) {
+
     }
 
     public InetSocketAddress getAddress() {
@@ -412,7 +427,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public UUID getPlayerUUID() {
+    public PlayerProfile getPlayerProfile() {
+        return null;
+    }
+
+    @Override
+    public @Nullable Player getPlayer() {
         return null;
     }
 
@@ -436,21 +456,6 @@ public class OfflinePlayer implements Player {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public ConnectionType getConnectionType() {
-        return null;
-    }
-
-    @Override
-    public boolean hasReceivedPacket0() {
-        return false;
-    }
-
-    @Override
-    public boolean isUsingReleaseToBeta() {
-        return false;
-    }
-
     public void resetPlayerTime() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -471,8 +476,13 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendPacket(Player player, Packet packet) {
+    public @Nullable PlayerConnection getConnection() {
+        return null;
+    }
 
+    @Override
+    public int getPing() {
+        return 0;
     }
 
     public boolean isPermissionSet(String string) {
@@ -521,5 +531,30 @@ public class OfflinePlayer implements Player {
     @Override
     public void sendMap(MapView mv) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void sendPluginMessage(Plugin plugin, String s, byte[] bytes) {
+
+    }
+
+    @Override
+    public Set<String> getListeningChannels() {
+        return Set.of();
+    }
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return null;
+    }
+
+    @Override
+    public void accessPersistentDataContainer(Consumer<PersistentDataContainer> consumer) {
+        Player.super.accessPersistentDataContainer(consumer);
+    }
+
+    @Override
+    public <T> T accessPersistentDataContainerReturning(Function<PersistentDataContainer, T> function) {
+        return Player.super.accessPersistentDataContainerReturning(function);
     }
 }

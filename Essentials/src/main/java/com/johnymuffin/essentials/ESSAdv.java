@@ -1,7 +1,7 @@
 package com.johnymuffin.essentials;
 
 import com.earth2me.essentials.Essentials;
-import com.johnymuffin.discordcore.DiscordCore;
+import org.retromc.discordcore.api.DiscordCoreAPI;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.Bukkit;
 
@@ -34,7 +34,7 @@ public class ESSAdv {
         }
 
         if (config.getConfigBoolean("discord.enable")) {
-            if (!Bukkit.getServer().getPluginManager().isPluginEnabled("DiscordCore")) {
+            if (!Bukkit.getServer().getPluginManager().isPluginEnabled("DiscordCore-6")) {
                 logInfo(Level.WARNING, "Discord Core support is enabled however the Discord Core plugin couldn't be found. Disabling Discord Core support");
                 config.setConfigOptionAndSave("discord.enable", false);
             } else {
@@ -53,13 +53,12 @@ public class ESSAdv {
         if (!config.getConfigBoolean("discord.enable")) {
             return;
         }
-        DiscordCore Core = (DiscordCore) Bukkit.getServer().getPluginManager().getPlugin("DiscordCore");
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
         eb.setColor(Color.RED);
         eb.setDescription(description);
         eb.setFooter(footer, null);
-        Core.Discord().jda.getTextChannelById(config.getConfigString("discord.channel-id")).sendMessage(eb.build()).queue();
+        DiscordCoreAPI.sendEmbed(Long.parseLong(config.getConfigString("discord.channel-id")), eb);
     }
 
 

@@ -1,7 +1,8 @@
 package com.earth2me.essentials;
 
-import com.projectposeidon.ConnectionType;
-import net.minecraft.server.Packet;
+import com.legacyminecraft.poseidon.network.connection.PlayerConnection;
+import com.legacyminecraft.poseidon.persistence.PersistentDataContainer;
+import com.legacyminecraft.poseidon.profile.PlayerProfile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -14,6 +15,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+import org.jspecify.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.util.HashSet;
@@ -290,6 +292,16 @@ public class PlayerWrapper implements Player {
     }
 
     @Override
+    public String getNameTag() {
+        return base.getNameTag();
+    }
+
+    @Override
+    public void setNameTag(String s) {
+        base.setNameTag(s);
+    }
+
+    @Override
     public void damage(int i) {
         base.damage(i);
     }
@@ -462,6 +474,16 @@ public class PlayerWrapper implements Player {
         return base.getUniqueId();
     }
 
+    @Override
+    public PlayerProfile getPlayerProfile() {
+        return base.getPlayerProfile();
+    }
+
+    @Override
+    public @Nullable Player getPlayer() {
+        return base.getPlayer();
+    }
+
     public UUID getPlayerUUID() {
         return getUniqueId();
     }
@@ -486,20 +508,6 @@ public class PlayerWrapper implements Player {
         return base.isPlayerTimeRelative();
     }
 
-    @Override
-    public ConnectionType getConnectionType() {
-        return null;
-    }
-
-    @Override
-    public boolean hasReceivedPacket0() {
-        return false;
-    }
-
-    public boolean isUsingReleaseToBeta() {
-        return base.isUsingReleaseToBeta();
-    }
-
     public void resetPlayerTime() {
         base.resetPlayerTime();
     }
@@ -520,8 +528,13 @@ public class PlayerWrapper implements Player {
     }
 
     @Override
-    public void sendPacket(Player player, Packet packet) {
+    public @Nullable PlayerConnection getConnection() {
+        return base.getConnection();
+    }
 
+    @Override
+    public int getPing() {
+        return base.getPing();
     }
 
     public boolean isPermissionSet(String string) {
@@ -571,5 +584,20 @@ public class PlayerWrapper implements Player {
     @Override
     public void sendMap(MapView mv) {
         base.sendMap(mv);
+    }
+
+    @Override
+    public void sendPluginMessage(Plugin plugin, String s, byte[] bytes) {
+        base.sendPluginMessage(plugin, s, bytes);
+    }
+
+    @Override
+    public Set<String> getListeningChannels() {
+        return base.getListeningChannels();
+    }
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return base.getPersistentDataContainer();
     }
 }

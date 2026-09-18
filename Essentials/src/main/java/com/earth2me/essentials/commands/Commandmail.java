@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.johnymuffin.beta.discordauth.DiscordAuthentication;
-import com.johnymuffin.discordcore.DiscordCore;
+import org.retromc.discordcore.v6.DiscordCorePlugin;
 import com.johnymuffin.essentials.ESSAdvConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -94,7 +94,7 @@ public class Commandmail extends EssentialsCommand {
     private void forwardMailToDiscord(User sender, User recipient, String[] args) {
 
         // Check if both DiscordAuthentication and DiscordCore plugins are enabled
-        if (!(Bukkit.getPluginManager().isPluginEnabled("DiscordAuthentication") && Bukkit.getPluginManager().isPluginEnabled("DiscordCore"))) {
+        if (!(Bukkit.getPluginManager().isPluginEnabled("DiscordAuthentication") && Bukkit.getPluginManager().isPluginEnabled("DiscordCore-6"))) {
             return;
         }
 
@@ -118,8 +118,8 @@ public class Commandmail extends EssentialsCommand {
 
             if (discordID != null) {
                 log(Level.INFO, "Mail sent from " + sender.getName() + " to " + targetUsername + " forwarding to Discord ID: " + discordID);
-                DiscordCore discordCore = (DiscordCore) Bukkit.getPluginManager().getPlugin("DiscordCore");
-                JDA jda = discordCore.getDiscordBot().getJda();
+                DiscordCorePlugin discordCore = (DiscordCorePlugin) Bukkit.getPluginManager().getPlugin("DiscordCore-6");
+                JDA jda = discordCore.getDiscordBot().getJDA();
 
                 jda.retrieveUserById(discordID).queue(discordUser -> {
                     if (discordUser != null) {
@@ -130,7 +130,7 @@ public class Commandmail extends EssentialsCommand {
                             embedBuilder.setDescription("You have received a new mail message on the Minecraft server from " + sender.getName() + ".\n\n**Message:**\n" + getFinalArg(args, 2) + "\n\n*Note: You can use `/mail discord` in-game to toggle receiving mail via Discord.*");
                             embedBuilder.setFooter("Essentials (RetroMC fork) - Mail Command", "https://wiki.retromc.org/images/1/1a/Retromcnew.png");
                             embedBuilder.setColor(0x00FF00);
-                            privateChannel.sendMessage(embedBuilder.build()).queue();
+                            privateChannel.sendMessageEmbeds(embedBuilder.build()).queue();
 
                             Bukkit.getScheduler().callSyncMethod(ess, () -> {
                                 sender.sendMessage(Util.format("mailSentDiscord", discordUser.getAsTag()));
