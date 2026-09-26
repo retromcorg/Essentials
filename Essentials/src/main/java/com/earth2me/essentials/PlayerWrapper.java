@@ -281,7 +281,9 @@ public class PlayerWrapper implements Player {
     @Override
     public String getDisplayName() {
         if (base.getDisplayName() != null)
-            return base.getDisplayName();
+            // .replace() to allow support for color codes \u00a7 == §
+            // color codes '&[0-9a-f]' are set through display name
+            return base.getDisplayName().replace("&", "\u00a7");
         else
             return base.getName();
     }
