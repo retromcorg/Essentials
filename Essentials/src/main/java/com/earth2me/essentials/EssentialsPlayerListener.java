@@ -194,10 +194,16 @@ public class EssentialsPlayerListener extends PlayerListener {
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.toggleGodModeEnabled();
         }
+        // If viewer was doing invsee, save their changes to the target before restoring
+        if (ess.getInvseeManager().hasSession(user.getName())) {
+            ess.getInvseeManager().endSession(user);
+        }
         if (user.getSavedInventory() != null) {
             user.getInventory().setContents(user.getSavedInventory());
             user.setSavedInventory(null);
         }
+        // Save this player's real inventory so admins can view/edit it while offline
+        user.setStoredInventory(user.getInventory().getContents());
         user.updateActivity(false);
         user.dispose();
         if (!ess.getSettings().getReclaimSetting()) {
@@ -275,6 +281,21 @@ public class EssentialsPlayerListener extends PlayerListener {
                 user.sendMessage(Util.format("youHaveNewMail", mail.size()));
             }
         }
+
+        // Apply any inventory changes made by an admin while this player was offline.
+        // Delayed by 1 tick so the vanilla inventory load completes first.
+        final String joiningName = user.getName();
+        ess.scheduleSyncDelayedTask(() -> {
+            ItemStack[] pending =
+                    ess.getInvseeManager().loadAndClearPendingFile(joiningName);
+            if (pending == null) return;
+
+            User u = ess.getUser(joiningName);
+            if (u == null || u.getBase() instanceof OfflinePlayer) return;
+
+            u.getInventory().setContents(pending);
+            u.getBase().updateInventory();
+        }, 1);
     }
 
     @Override

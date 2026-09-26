@@ -352,6 +352,34 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return is;
     }
 
+    // Stored inventory is the player's real inventory snapshot, saved on quit for offline invsee support.
+    public ItemStack[] getStoredInventory() {
+        int size = config.getInt("playerInventory.size", 0);
+        if (size < 1) return null;
+        ItemStack[] is = new ItemStack[size];
+        for (int i = 0; i < size; i++) {
+            is[i] = config.getItemStack("playerInventory." + i);
+        }
+        return is;
+    }
+
+    public void setStoredInventory(ItemStack[] is) {
+        if (is == null || is.length == 0) {
+            config.removeProperty("playerInventory");
+        } else {
+            config.setProperty("playerInventory.size", is.length);
+            for (int i = 0; i < is.length; i++) {
+                if (is[i] != null && is[i].getType() != Material.AIR) {
+                    config.setProperty("playerInventory." + i, is[i]);
+                } else {
+                    config.removeProperty("playerInventory." + i);
+                }
+            }
+        }
+        config.save();
+    }
+
+
     private boolean getTeleportEnabled() {
         return config.getBoolean("teleportenabled", true);
     }
