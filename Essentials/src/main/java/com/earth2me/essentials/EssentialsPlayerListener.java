@@ -251,7 +251,7 @@ public class EssentialsPlayerListener extends PlayerListener {
         }
 
         if (ess.getSettings().changeDisplayName()) {
-            user.setDisplayName(user.getNick().replaceAll("(&([a-f0-9]))", "\u00A7$2"));
+            user.setDisplayName(user.getNick());
         }
         user.updateActivity(false);
         if (user.isAuthorized("essentials.sleepingignored")) {

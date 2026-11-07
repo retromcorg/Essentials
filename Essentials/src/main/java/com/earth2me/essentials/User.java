@@ -216,7 +216,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser 
         if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName())) {
             nickname.append(getName());
         } else {
-            nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
+            nickname.append(ess.getSettings().getNicknamePrefix()).append(nick.replaceAll("(?i)[&§]([0-9a-f])", isOp() || hasPermission("fundamentals.nickname.color") ? "§$1" : ""));
         }
         if (isOp()) {
             try {
