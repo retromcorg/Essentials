@@ -200,7 +200,7 @@ public class Commandnick extends EssentialsCommand {
     }
 
     private void setServerNickname(User targetUser, String nickname) {
-        targetUser.setDisplayName(ess.getSettings().getNicknamePrefix() + nickname);
         targetUser.setNickname(nickname);
+        targetUser.setDisplayName(targetUser.getNick());
     }
 }
